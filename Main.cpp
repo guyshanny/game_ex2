@@ -10,6 +10,10 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "World.h"
+
+World* _world;
+
 GLuint programID;
 GLuint texture;
 
@@ -145,14 +149,17 @@ void init( void )
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glClearColor( 0.0, 0.0, 0.0, 1.0 );
+
+	// Creating the world
+	_world = new World();
 }
 
 void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );     // clear the window
 
-	// Projection matrix : 45?Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	Projection = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
+	_world->draw();
+
 	// Camera matrix
 	View       = glm::lookAt(	cameraPos, // Camera is at (4,3,3), in World Space
 								glm::vec3(0,0,0), // and looks at the origin
@@ -275,5 +282,10 @@ int main( int argc, char **argv )
 	glutIdleFunc( update );
 
     glutMainLoop();
+
+	if (NULL != _world)
+	{
+		delete _world;
+	}
     return 0;
 }
