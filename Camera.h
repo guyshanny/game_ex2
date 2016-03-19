@@ -57,6 +57,7 @@ public:
 
 	// Getters & setters
 	mat4 getViewMatrix() { return _view; }
+	vec3 getPosition() { return _position; }
 	void setPosition(const vec3& position) { _position = position; }
 	void setDirection(const vec3& direction) { _direction = direction; }
 	void setUp(const vec3& up) { _up = up; }

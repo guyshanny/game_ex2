@@ -28,15 +28,14 @@ class World {
 	// Attribute handle:
 	GLint _posAttrib;
 
-	// Uniform handle:
-	GLint _fillColorUV, _gpuWVP;
+	// Program params
+	GLuint _programID, _texture;
 
 	// View port frame:
 	float _width, _height, _offsetX, _offsetY;
 
-	// WVP matrices
+	// MVP matrices
 	mat4 _projection;
-	mat4 _world;
 
 	// Camera variables
 	Camera* _camera;
@@ -48,17 +47,23 @@ class World {
 	void _drawWorld(const mat4& view);
 
 public:
-	World();
+	World(const GLuint& programID, const GLuint& texture);
 	virtual ~World();
 	void init();
 	void draw();
 	void resize(int width, int height);
 
-	// Keys handling
-	void moveForwardKeyPressed();
-	void moveBackwardKeyPressed();
-	void turnLeftKeyPressed();
+	// Keyboard handling
+	void forwardKeyPressed();
+	void backwardKeyPressed();
 	void turnRightKeyPressed();
+	void turnLeftKeyPressed();
+	void changeColorKeyPressed();
+
+	// Getters&Setters
+	GLuint getProgramID() { return _programID; }
+	Camera* getCamera() { return _camera; }
+
 };
 
 #endif

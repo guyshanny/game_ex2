@@ -1,11 +1,17 @@
 #version 120
 
 // Output data will be interpolated for each fragment.
-varying out vec3 PositionWorldPass;
-varying out vec3 NormalViewPass;
-varying out vec3 EyeDirectionViewPass;
-varying out vec3 LightDirectionViewPass;
-varying out vec2 TexCoordPass;
+out vec3 PositionWorldPass;
+out vec3 NormalViewPass;
+out vec3 EyeDirectionViewPass;
+out vec3 LightDirectionViewPass;
+out vec2 TexCoordPass;
+//varying out vec3 PositionWorldPass;
+//varying out vec3 NormalViewPass;
+//varying out vec3 EyeDirectionViewPass;
+//varying out vec3 LightDirectionViewPass;
+//varying out vec2 TexCoordPass;
+
 // Values that stay constant for the whole mesh.
 uniform mat4 gModel, gView, gProjection;
 uniform vec4 gLightPosition; // light (in world)

@@ -12,20 +12,37 @@
 
 #include "World.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//												Globals											  //
+////////////////////////////////////////////////////////////////////////////////////////////////////
 World* _world;
-
-GLuint programID;
-GLuint texture;
 
 int g_colormode = 0;
 
-glm::mat4 Model;
-glm::mat4 View;
-glm::mat4 Projection;
-
-glm::vec3 cameraPos = glm::vec3(0, 0, 15);
 glm::vec4 lightPos = glm::vec4(4, 4, 4, 1);
 glm::vec4 teapotColor = glm::vec4(1, 1, 1, 1);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//												Controls										  //
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace Controls
+{
+	enum KeyControls
+	{
+		KEY_ESC = (27),
+		KEY_RESET = ('r'),
+		KEY_RELOAD = ('l'),
+
+		// Teapot controls
+		KEY_COLOR_CHANGE = (' '),
+
+		// Camera controls
+		KEY_FORWARD = ('w'),
+		KEY_BACKWARD = ('s'),
+		KEY_TURN_LEFT = ('a'),
+		KEY_TURN_RIGHT = ('d'),
+	};
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -140,10 +157,10 @@ GLuint InitTexture(char* fName) {
 void init( void )
 {
     // Load shaders and use the resulting shader program
-    programID = InitShader( "phong.vert", "phong.frag" );
+    GLuint programID = InitShader( "phong.vert", "phong.frag" );
 	glUseProgram(programID);
 
-	texture = InitTexture("texture.jpg");
+	GLuint texture = InitTexture("texture.jpg");
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glEnable(GL_DEPTH_TEST);
@@ -151,7 +168,7 @@ void init( void )
 	glClearColor( 0.0, 0.0, 0.0, 1.0 );
 
 	// Creating the world
-	_world = new World();
+	_world = new World(programID, texture);
 }
 
 void display( void )
@@ -160,61 +177,59 @@ void display( void )
 
 	_world->draw();
 
-	// Camera matrix
-	View       = glm::lookAt(	cameraPos, // Camera is at (4,3,3), in World Space
-								glm::vec3(0,0,0), // and looks at the origin
-								glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-						   );
+	GLuint programID = _world->getProgramID();
 
     glUseProgram(programID);
 
-	// Get a handle for our "gProjection" uniform
-	GLuint projectionMatrixID = glGetUniformLocation(programID, "gProjection");
-	glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, &Projection[0][0]);
-	// Get a handle for our "gView" uniform
-	GLuint viewMatrixID = glGetUniformLocation(programID, "gView");
-	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &View[0][0]);
-	// Get a handle for our "gModel" uniform
-	GLuint modelMatrixID = glGetUniformLocation(programID, "gModel");
-	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &Model[0][0]);
-
 	// Get a handle for our "gEyePosition" uniform
+	vec3 cameraPosition = _world->getCamera()->getPosition();
 	GLuint cameraID = glGetUniformLocation(programID, "gEyePosition");
-	glUniform3f(cameraID, cameraPos.x, cameraPos.y, cameraPos.z);
+	glUniform3f(cameraID, cameraPosition.x, cameraPosition.y, cameraPosition.z);
 	// Get a handle for our "gLightPosition" uniform
 	GLuint lightID = glGetUniformLocation(programID, "gLightPosition");
 	glUniform4f(lightID, lightPos.x, lightPos.y, lightPos.z, lightPos.w);
-	
-	if (g_colormode == 0) teapotColor = glm::vec4(1, 1, 1, 1);
-	else if (g_colormode == 1) teapotColor = glm::vec4(1, 0, 0, 1);
-	else if (g_colormode == 2) teapotColor = glm::vec4(0, 1, 0, 1);
-	else if (g_colormode == 3) teapotColor = glm::vec4(0, 0, 1, 1);
-	else if (g_colormode == 4) teapotColor = glm::vec4(1, 1, 0, 1);
-	// Get a handle for our "gMaterialColor" uniform
-	GLuint materialID = glGetUniformLocation(programID, "gMaterialColor");
-	glUniform4f(materialID, teapotColor.r, teapotColor.g, teapotColor.b, teapotColor.a);
 
-	GLuint textureID  = glGetUniformLocation(programID, "gTextureSampler");
-	glUniform1i(textureID, 0);
-
-	// Teapot
-	glutSolidTeapot(1.0);
-	glutSwapBuffers();
+	glUseProgram(0);
 }
 
 void keyboard( unsigned char key, int x, int y )
 {
-	switch (key)  
+	switch (tolower(key))
 	{    
-	case 0x1B:    
-	case 'q':    
-	case 'Q':      
-		exit(0);     
-	case ' ':
-		g_colormode = (g_colormode+1) % 5;
-		printf("g_colormode=%d\n", g_colormode);
+		case Controls::KEY_FORWARD:
+		{
+			_world->forwardKeyPressed();
+		}
 		break;
+		case Controls::KEY_BACKWARD:
+		{
+			_world->backwardKeyPressed();
+		}
+		break;
+		case Controls::KEY_TURN_RIGHT:
+		{
+			_world->turnRightKeyPressed();
+		}
+		break;
+		case Controls::KEY_TURN_LEFT:
+		{
+			_world->turnLeftKeyPressed();
+		}
+		break;
+		case Controls::KEY_ESC:
+		{
+			exit(0);
+		}
+		break;
+		case Controls::KEY_COLOR_CHANGE:
+		{
+			_world->changeColorKeyPressed();
+		}
+		default:
+			std::cerr << "Key " << tolower(key)<< " undefined\n";
+			break;
 	}
+
 	glutPostRedisplay();
 }
 
@@ -261,7 +276,7 @@ void update()
 	// 1st geometry translate & rotate in x & rotate in y
 	xTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)); 
 	xRotation = glm::rotate(xTranslate, angle, glm::vec3(1, 0, 0));
-	Model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
+// 	Model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
 
 	glutPostRedisplay();
 }
@@ -286,6 +301,7 @@ int main( int argc, char **argv )
 	if (NULL != _world)
 	{
 		delete _world;
+		_world = NULL;
 	}
     return 0;
 }
