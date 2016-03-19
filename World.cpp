@@ -25,9 +25,9 @@
 
 // Objects
 #include "Teapot.h"
+#include "Wall.h"
 
-World::World(const GLuint& programID, const GLuint& texture) : _programID(programID),
-															   _texture(texture)
+World::World(const GLuint& programID) : _programID(programID)
 {
 	// Projection matrix : 45?Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	_projection = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
@@ -62,8 +62,8 @@ void World::init()
 
 void World::_createSceneObjects()
 {
-	_objects.push_back((Object*)(new Teapot(_programID)));
-
+	_objects.push_back((Object*)(new Teapot(_programID, "textures\teapot.jpg")));
+ 	_objects.push_back((Object*)(new Wall(_programID, WRAPPING_CUBE_SIZE/2, WRAPPING_CUBE_SIZE/2, "textures\\wall.bmp")));
 }
 #pragma endregion
 

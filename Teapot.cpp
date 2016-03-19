@@ -1,14 +1,23 @@
 #include "Teapot.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "GlobalFunctions.h"
 
-Teapot::Teapot(const GLuint& programID) : Object(), _colorIndicator(0)
+Teapot::Teapot(const GLuint& programID, const std::string textureIMG) :
+	Object(programID, vec3(0.f, 0.f, 0.f), vec3(0.0f), 0, 0, textureIMG),
+	_colorIndicator(0)
 {
+	// Params
 	_color = vec4(1, 1, 1, 1);
 	_programID = programID;
+	_textureID = InitTexture(TEXTURE_IMG);
+
+	// InitialPosition
 	float angle = -1;
 	glm::mat4 xRotation = glm::rotate(_model, angle, glm::vec3(1, 0, 0));
 	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
+
+
 }
 
 void Teapot::draw(const mat4 & projection, const mat4 & view)
@@ -21,8 +30,10 @@ void Teapot::draw(const mat4 & projection, const mat4 & view)
 	GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
 	glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
 	
-	GLuint textureID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
-	glUniform1i(textureID, 0);
+	glBindTexture(GL_TEXTURE_2D, _textureID);
+	GLuint textureSamplerID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
+	glUniform1i(textureSamplerID, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glutSolidTeapot(1.0);
 	glutSwapBuffers();

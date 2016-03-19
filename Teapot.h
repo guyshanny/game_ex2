@@ -6,11 +6,12 @@
 // Shader's uniform's variables
 #define MATERIAL_COLOR "gMaterialColor"
 #define TEXTURE_SAMPLER "gTextureSampler"
+#define TEXTURE_IMG "textures\teapot.jpg"
 
 class Teapot : Object
 {
 public:
-	Teapot(const GLuint& programID);
+	Teapot(const GLuint& programID, const std::string textureIMG);
 
 	void draw(const mat4& projection, const mat4& view);
 	void update() {}

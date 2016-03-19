@@ -1,22 +1,32 @@
 #include "Object.h"
 
-Object::Object() : _programID(NULL), _textureID(NULL), _model(1.0), _position(0.0f), _direction(0.0f), _initialPosition(0.0f), _initialDirection(0.0f), _vao(0), _vbo(0)
+Object::Object(const std::string textureIMG = "") : _programID(NULL), _textureID(NULL), _model(1.0), _position(0.0f), _direction(0.0f), _initialPosition(0.0f), _initialDirection(0.0f), _vao(0), _vbo(0), _textureImg(textureIMG)
 {
+	if (NULL < _textureImg.size())
+	{
+		_textureID = InitTexture(_textureImg.c_str());
+	}
 }
 
 Object::Object(const GLuint& programID,
 				const vec3 & position,
 				const vec3 & direction,
 				const GLuint& vao,
-				const GLint& vbo) :
+				const GLint& vbo,
+				const std::string textureIMG = "") :
 	_programID(programID),
 	_position(position),
 	_direction(direction),
 	_initialPosition(position),
 	_initialDirection(direction),
 	_vao(vao),
-	_vbo(vbo)
+	_vbo(vbo),
+	_textureImg(textureIMG)
 {
+	if (NULL < _textureImg.size())
+	{
+		_textureID = InitTexture(_textureImg.c_str());
+	}
 }
 
 void Object::_useMVP(const mat4 & projection, const mat4 & view)

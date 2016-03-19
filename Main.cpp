@@ -135,24 +135,24 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
     return program;
 }
 
-GLuint InitTexture(char* fName) {
-	cv::Mat img = cv::imread(fName);
-	//cv::imshow("CV debug", img);
-
-	GLuint texture;
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.ptr());
-
-	return texture;
-}
+// GLuint InitTexture(char* fName) {
+// 	cv::Mat img = cv::imread(fName);
+// 	//cv::imshow("CV debug", img);
+// 
+// 	GLuint texture;
+// 
+// 	glGenTextures(1, &texture);
+// 	glBindTexture(GL_TEXTURE_2D, texture);
+// 
+// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+// 
+// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.ptr());
+// 
+// 	return texture;
+// }
 
 void init( void )
 {
@@ -160,15 +160,15 @@ void init( void )
     GLuint programID = InitShader( "phong.vert", "phong.frag" );
 	glUseProgram(programID);
 
-	GLuint texture = InitTexture("texture.jpg");
-	glBindTexture(GL_TEXTURE_2D, texture);
+// 	GLuint texture = InitTexture("texture.jpg");
+// 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glClearColor( 0.0, 0.0, 0.0, 1.0 );
 
 	// Creating the world
-	_world = new World(programID, texture);
+	_world = new World(programID);
 }
 
 void display( void )
@@ -285,7 +285,7 @@ int main( int argc, char **argv )
 {
 	glutInit(&argc, argv);
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize( 512, 512 );
+    glutInitWindowSize(WRAPPING_CUBE_SIZE, WRAPPING_CUBE_SIZE);
     glutCreateWindow(argv[0]);
     
 	glewInit();

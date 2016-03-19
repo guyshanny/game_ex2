@@ -101,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GlobalFunctions.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="packages\glm.0.9.7.1\build\native\include\glm\detail\glm.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -118,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="GlobalFunctions.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Teapot.h" />

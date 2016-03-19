@@ -29,7 +29,7 @@ class World {
 	GLint _posAttrib;
 
 	// Program params
-	GLuint _programID, _texture;
+	GLuint _programID;
 
 	// View port frame:
 	float _width, _height, _offsetX, _offsetY;
@@ -47,7 +47,7 @@ class World {
 	void _drawWorld(const mat4& view);
 
 public:
-	World(const GLuint& programID, const GLuint& texture);
+	World(const GLuint& programID);
 	virtual ~World();
 	void init();
 	void draw();

@@ -5,7 +5,9 @@
 #include <GL/glew.h>
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <string>
 #include "Globals.h"
+#include "GlobalFunctions.h"
 
 #include <GL/glew.h>
 #ifdef __APPLE__
@@ -33,13 +35,15 @@ protected:
 	// Object's properties
 	glm::vec4 _color;
 	GLuint _textureID;
+	const std::string _textureImg;
 
-	Object();
+	Object(const std::string textureIMG);
 	Object(const GLuint& programID, 
 		   const vec3 & position, 
 		   const vec3 & direction, 
 		   const GLuint& vao, 
-		   const GLint& vbo);
+		   const GLint& vbo,
+		   const std::string textureIMG);
 
 	void _useMVP(const mat4& projection, const mat4& view);
 
