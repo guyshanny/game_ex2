@@ -43,6 +43,7 @@ class World {
 	// Scene objects
 	std::vector<Object*> _objects;
 	void _createSceneObjects();
+	glm::vec4 _lightPos;
 
 	void _drawWorld(const mat4& view);
 
@@ -59,6 +60,7 @@ public:
 	void turnRightKeyPressed();
 	void turnLeftKeyPressed();
 	void changeColorKeyPressed();
+	void moveLight(int key);
 
 	// Getters&Setters
 	GLuint getProgramID() { return _programID; }

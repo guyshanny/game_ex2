@@ -16,8 +16,6 @@ Teapot::Teapot(const GLuint& programID, const std::string textureIMG) :
 	float angle = -1;
 	glm::mat4 xRotation = glm::rotate(_model, angle, glm::vec3(1, 0, 0));
 	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
-
-
 }
 
 void Teapot::draw(const mat4 & projection, const mat4 & view)
@@ -25,19 +23,19 @@ void Teapot::draw(const mat4 & projection, const mat4 & view)
 	_useMVP(projection, view);
 
 	BEGIN_OPENGL;
+	{
+		// Get a handle for our "gMaterialColor" uniform
+		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
+		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
 	
-	// Get a handle for our "gMaterialColor" uniform
-	GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
-	glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
-	
-	glBindTexture(GL_TEXTURE_2D, _textureID);
-	GLuint textureSamplerID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
-	glUniform1i(textureSamplerID, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, _textureID);
+		GLuint textureSamplerID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
+		glUniform1i(textureSamplerID, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
-	glutSolidTeapot(1.0);
-	glutSwapBuffers();
-
+		glutSolidTeapot(1.0);
+		glutSwapBuffers();
+	}
 	END_OPENGL;
 }
 

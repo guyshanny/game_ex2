@@ -14,16 +14,17 @@ Wall::Wall(const GLuint & programID,
 void Wall::draw(const mat4 & projection, const mat4 & view)
 {
 	BEGIN_OPENGL;
-
 	{
+		glUniform1i(glGetUniformLocation(_programID, "gTextureSampler"), 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _textureID);
+
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glBindVertexArray(_vao);
 		glDrawArrays(GL_LINES, 0, _vertices.size());
 		glBindVertexArray(0);
 	}
-
 	END_OPENGL;
-
 }
 
 void Wall::_buildWall()
@@ -58,6 +59,4 @@ void Wall::_buildWall()
 								0);
 	}
 	END_OPENGL;
-
-
 }

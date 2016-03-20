@@ -12,7 +12,6 @@ GLuint InitTexture(const char* fName)
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -21,8 +20,6 @@ GLuint InitTexture(const char* fName)
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.ptr());
 	}
-
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 	return texture;
 }

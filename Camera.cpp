@@ -3,13 +3,17 @@
 
 Camera* Camera::_instance = NULL;
 
-Camera::Camera() :  _direction(0.0f, 0.0f, 1.0f),
-					_position(0.0f, 0.0f, 15.0f),
-					_up(0.0f, 1.0f, 0.0f),
+Camera::Camera() : _direction(0, 0, -15),
+					_position(0, 0, 15),
+					_up(0, 1, 0),
 					_initialPosition(_position),
 					_initialDirection(_direction),
 					_speed(0.1f)
 {
+	for (int i = 0; i < Commands::NUM_OF_COMMANDS; i++)
+	{
+		_commands[i] = false;
+	}	
 }
 
 void Camera::init(const float & angle, const float & windowBoundary)
@@ -31,7 +35,7 @@ void Camera::update()
 
 mat4 Camera::_calculateViewMatrix()
 {
-	_view = lookAt(_position, glm::vec3(0, 0, 0), _up);
+	_view = lookAt(_position, _position + _direction, _up);
 	return _view;
 }
 

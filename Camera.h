@@ -34,8 +34,8 @@ public:
 		TURN_LEFT,
 		TURN_RIGHT,
 
-		// Number of commands - 0 base
-		NUM_OF_COMMANDS = 3
+		// Number of commands
+		NUM_OF_COMMANDS = 4
 	};
 
 	static Camera* instance()
@@ -58,10 +58,6 @@ public:
 	// Getters & setters
 	mat4 getViewMatrix() { return _view; }
 	vec3 getPosition() { return _position; }
-	void setPosition(const vec3& position) { _position = position; }
-	void setDirection(const vec3& direction) { _direction = direction; }
-	void setUp(const vec3& up) { _up = up; }
-	void setSpeed(const float& speed) { _speed = speed; }
 
 private:
 	vec3 _direction;
@@ -77,7 +73,7 @@ private:
 	float _angle;
 
 	// Commands
-	bool _commands[Camera::Commands::NUM_OF_COMMANDS] = { false };
+	bool _commands[Commands::NUM_OF_COMMANDS];
 	void _moveForwardLogic();
 	void _moveBackwardLogic();
 	void _turnLeftLogic();

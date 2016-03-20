@@ -7,9 +7,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
 #include "World.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,9 +15,6 @@
 World* _world;
 
 int g_colormode = 0;
-
-glm::vec4 lightPos = glm::vec4(4, 4, 4, 1);
-glm::vec4 teapotColor = glm::vec4(1, 1, 1, 1);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //												Controls										  //
@@ -135,33 +129,11 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
     return program;
 }
 
-// GLuint InitTexture(char* fName) {
-// 	cv::Mat img = cv::imread(fName);
-// 	//cv::imshow("CV debug", img);
-// 
-// 	GLuint texture;
-// 
-// 	glGenTextures(1, &texture);
-// 	glBindTexture(GL_TEXTURE_2D, texture);
-// 
-// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-// 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-// 
-// 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.ptr());
-// 
-// 	return texture;
-// }
-
 void init( void )
 {
     // Load shaders and use the resulting shader program
     GLuint programID = InitShader( "phong.vert", "phong.frag" );
 	glUseProgram(programID);
-
-// 	GLuint texture = InitTexture("texture.jpg");
-// 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -169,6 +141,7 @@ void init( void )
 
 	// Creating the world
 	_world = new World(programID);
+	_world->init();
 }
 
 void display( void )
@@ -176,20 +149,6 @@ void display( void )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );     // clear the window
 
 	_world->draw();
-
-	GLuint programID = _world->getProgramID();
-
-    glUseProgram(programID);
-
-	// Get a handle for our "gEyePosition" uniform
-	vec3 cameraPosition = _world->getCamera()->getPosition();
-	GLuint cameraID = glGetUniformLocation(programID, "gEyePosition");
-	glUniform3f(cameraID, cameraPosition.x, cameraPosition.y, cameraPosition.z);
-	// Get a handle for our "gLightPosition" uniform
-	GLuint lightID = glGetUniformLocation(programID, "gLightPosition");
-	glUniform4f(lightID, lightPos.x, lightPos.y, lightPos.z, lightPos.w);
-
-	glUseProgram(0);
 }
 
 void keyboard( unsigned char key, int x, int y )
@@ -226,37 +185,15 @@ void keyboard( unsigned char key, int x, int y )
 			_world->changeColorKeyPressed();
 		}
 		default:
-			std::cerr << "Key " << tolower(key)<< " undefined\n";
+			std::cerr << "Key " << tolower(key) << " undefined\n";
 			break;
 	}
-
 	glutPostRedisplay();
 }
 
 void specialkey(int key, int x, int y )
 {
-	switch (key)  
-	{    
-	case GLUT_KEY_LEFT:
-		lightPos[0] -= 0.5f;
-		break;  
-	case GLUT_KEY_RIGHT:    
-		lightPos[0] += 0.5f;
-		break;  
-	case GLUT_KEY_UP:      
-		lightPos[1] += 0.5f;
-		break;  
-	case GLUT_KEY_DOWN:
-		lightPos[1] -= 0.5f;
-		break;  
-	case GLUT_KEY_PAGE_UP:      
-		lightPos[2] -= 0.5f;
-		break;  
-	case GLUT_KEY_PAGE_DOWN:
-		lightPos[2] += 0.5f;
-		break;  
-	}
-	printf("lightPos %f %f %f\n", lightPos[0], lightPos[1], lightPos[2]);
+	_world->moveLight(key);
 	glutPostRedisplay();
 }
 

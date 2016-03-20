@@ -27,16 +27,13 @@
 #include "Teapot.h"
 #include "Wall.h"
 
-World::World(const GLuint& programID) : _programID(programID)
+World::World(const GLuint& programID) : _programID(programID), _lightPos(4, 4, 4, 1)
 {
 	// Projection matrix : 45?Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	_projection = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
 	
 	// Camera handling
 	_camera = Camera::instance();
-	_camera->setPosition(glm::vec3(0, 0, 15));
-	_camera->setDirection(glm::vec3(0, 0, 0));
-	_camera->setUp(glm::vec3(0, 1, 0));
 
 	// Create scene objects
 	_createSceneObjects();
@@ -58,12 +55,17 @@ World::~World()
 #pragma region Init
 void World::init()
 {
+	_camera->init((float)M_PI, 10);
+	for (Object* object : _objects)
+	{
+		object->init();
+	}
 }
 
 void World::_createSceneObjects()
 {
 	_objects.push_back((Object*)(new Teapot(_programID, "textures\teapot.jpg")));
- 	_objects.push_back((Object*)(new Wall(_programID, WRAPPING_CUBE_SIZE/2, WRAPPING_CUBE_SIZE/2, "textures\\wall.bmp")));
+ 	_objects.push_back((Object*)(new Wall(_programID, WRAPPING_CUBE_SIZE/2, WRAPPING_CUBE_SIZE/2, "textures\wall.bmp")));
 }
 #pragma endregion
 
@@ -87,6 +89,17 @@ void World::draw()
 
 void World::_drawWorld(const mat4& view)
 {
+	BEGIN_OPENGL
+	{
+		// Get a handle for our "gEyePosition" uniform
+		vec3 cameraPosition = _camera->getPosition();
+		GLuint cameraID = glGetUniformLocation(_programID, "gEyePosition");
+		glUniform3f(cameraID, cameraPosition.x, cameraPosition.y, cameraPosition.z);
+		// Get a handle for our "gLightPosition" uniform
+		GLuint lightID = glGetUniformLocation(_programID, "gLightPosition");
+		glUniform4f(lightID, _lightPos.x, _lightPos.y, _lightPos.z, _lightPos.w);
+	}
+	END_OPENGL
 }
 #pragma endregion
 
@@ -100,6 +113,32 @@ void World::changeColorKeyPressed()
 	Teapot* teapot = dynamic_cast<Teapot*>(_objects.front());
 	teapot->changeColor();
 }
+void World::moveLight(int key)
+{
+	switch (key)
+	{
+		case GLUT_KEY_LEFT:
+			_lightPos[0] -= 0.5f;
+			break;
+		case GLUT_KEY_RIGHT:
+			_lightPos[0] += 0.5f;
+			break;
+		case GLUT_KEY_UP:
+			_lightPos[1] += 0.5f;
+			break;
+		case GLUT_KEY_DOWN:
+			_lightPos[1] -= 0.5f;
+			break;
+		case GLUT_KEY_PAGE_UP:
+			_lightPos[2] -= 0.5f;
+			break;
+		case GLUT_KEY_PAGE_DOWN:
+			_lightPos[2] += 0.5f;
+			break;
+	}
+	printf("lightPos %f %f %f\n", _lightPos[0], _lightPos[1], _lightPos[2]);
+}
+
 #pragma endregion
 
 void World::resize(int width, int height)
