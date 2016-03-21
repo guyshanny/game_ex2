@@ -16,7 +16,7 @@ Camera::Camera() : _direction(0, 0, -15),
 	}	
 }
 
-void Camera::init(const float & angle, const float & windowBoundary)
+void Camera::init(const float & angle)
 {
 	_angle = angle;
 	_calculateViewMatrix();

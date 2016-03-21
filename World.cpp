@@ -55,7 +55,7 @@ World::~World()
 #pragma region Init
 void World::init()
 {
-	_camera->init((float)M_PI, 10);
+	_camera->init(0);
 	for (Object* object : _objects)
 	{
 		object->init();
@@ -65,7 +65,7 @@ void World::init()
 void World::_createSceneObjects()
 {
 	_objects.push_back((Object*)(new Teapot(_programID, "textures\teapot.jpg")));
- 	_objects.push_back((Object*)(new Wall(_programID, WRAPPING_CUBE_SIZE/2, WRAPPING_CUBE_SIZE/2, "textures\wall.bmp")));
+ 	_objects.push_back((Object*)(new Wall(_programID, WRAPPING_CUBE_SIZE/2, WRAPPING_CUBE_SIZE/2, "textures\\wall.bmp")));
 }
 #pragma endregion
 

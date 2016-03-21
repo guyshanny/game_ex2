@@ -46,7 +46,7 @@ public:
 		}
 		return _instance;
 	}
-	void init(const float& angle, const float& windowBoundary);
+	void init(const float& angle);
 	void update();
 
 	// Key functions
