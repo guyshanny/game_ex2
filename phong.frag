@@ -23,9 +23,8 @@ void main()
 	vec3 LightColor = vec3(1,1,1);
 	
 	// Material properties
-	vec3 MaterialDiffuseColor = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.xyz;
-	//vec3 MaterialDiffuseColor = gMaterialColor.xyz;
-	//vec3 MaterialDiffuseColor = gMaterialColor.xyz;
+	//vec3 MaterialDiffuseColor = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
+	vec3 MaterialDiffuseColor = gMaterialColor.rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(1.0,1.0,1.0);
 

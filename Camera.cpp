@@ -55,7 +55,6 @@ void Camera::_moveForwardLogic()
 	{
 		return;
 	}
-
 	_position += _direction * _speed;
 	_calculateViewMatrix();
 }
@@ -69,7 +68,6 @@ void Camera::_moveBackwardLogic()
 	{
 		return;
 	}
-
 	_position -= _direction * _speed;
 	_calculateViewMatrix();
 }
@@ -78,7 +76,7 @@ void Camera::_turnLeftLogic()
 {
 	_commands[Commands::TURN_LEFT] = false;
 
-	_angle += _speed;
+	_angle -= _speed;
 	_direction.x = glm::sin(_angle);
 	_direction.z = -glm::cos(_angle);
 	_calculateViewMatrix();
@@ -88,7 +86,7 @@ void Camera::_turnRightLogic()
 {
 	_commands[Commands::TURN_RIGHT] = false;
 
-	_angle -= _speed;
+	_angle += _speed;
 	_direction.x = glm::sin(_angle);
 	_direction.z = -glm::cos(_angle);
 	_calculateViewMatrix();

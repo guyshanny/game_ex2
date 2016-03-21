@@ -4,8 +4,6 @@
 #include "Object.h"
 
 // Shader's uniform's variables
-#define MATERIAL_COLOR "gMaterialColor"
-#define TEXTURE_SAMPLER "gTextureSampler"
 #define TEXTURE_IMG "textures\teapot.jpg"
 
 class Teapot : Object

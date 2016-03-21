@@ -16,6 +16,9 @@
 #include <GL/freeglut.h>
 #endif
 
+#define TEXTURE_SAMPLER "gTextureSampler"
+#define MATERIAL_COLOR "gMaterialColor"
+
 using namespace glm;
 
 class Object

@@ -8,8 +8,7 @@ Teapot::Teapot(const GLuint& programID, const std::string textureIMG) :
 	_colorIndicator(0)
 {
 	// Params
-	_color = vec4(1, 1, 1, 1);
-	_programID = programID;
+	_color = vec4(0, 0, 1, 1);
 	_textureID = InitTexture(TEXTURE_IMG);
 
 	// InitialPosition
@@ -28,12 +27,12 @@ void Teapot::draw(const mat4 & projection, const mat4 & view)
 		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
 		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
 	
-		glBindTexture(GL_TEXTURE_2D, _textureID);
-		GLuint textureSamplerID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
-		glUniform1i(textureSamplerID, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		//glBindTexture(GL_TEXTURE_2D, _textureID);
+		//GLuint textureSamplerID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
+		//glUniform1i(textureSamplerID, 0);
+		//glBindTexture(GL_TEXTURE_2D, 0);
 
-		glutSolidTeapot(1.0);
+		glutSolidTeapot(1.);
 		glutSwapBuffers();
 	}
 	END_OPENGL;

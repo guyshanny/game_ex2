@@ -8,6 +8,11 @@ Wall::Wall(const GLuint & programID,
 	_width(width),
 	_height(height)
 {
+	_color = vec4(1, 0, 1, 1);
+}
+
+void Wall::init()
+{
 	_buildWall();
 }
 
@@ -15,13 +20,17 @@ void Wall::draw(const mat4 & projection, const mat4 & view)
 {
 	BEGIN_OPENGL;
 	{
-		glUniform1i(glGetUniformLocation(_programID, "gTextureSampler"), 0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _textureID);
+		// Get a handle for our "gMaterialColor" uniform
+		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
+		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
+
+		//glUniform1i(glGetUniformLocation(_programID, TEXTURE_SAMPLER), 0);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, _textureID);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glBindVertexArray(_vao);
-		glDrawArrays(GL_LINES, 0, _vertices.size());
+		glDrawArrays(GL_TRIANGLE_FAN, 0, _vertices.size());
 		glBindVertexArray(0);
 	}
 	END_OPENGL;
@@ -30,10 +39,10 @@ void Wall::draw(const mat4 & projection, const mat4 & view)
 void Wall::_buildWall()
 {
 	// Create vertices
-	_vertices.push_back(vec4(-_width, -_height, -5.f, 1.0f));
-	_vertices.push_back(vec4(-_width, _height, -5.f, 1.0f));
-	_vertices.push_back(vec4(_width, -_height, -5.f, 1.0f));
-	_vertices.push_back(vec4(_width, _height, -5.f, 1.0f));
+	_vertices.push_back(vec4(-_width/2., -_height/2., -5.f, 1.0f));
+	_vertices.push_back(vec4(-_width/2., _height/2., -5.f, 1.0f));
+	_vertices.push_back(vec4(_width/2., -_height/2., -5.f, 1.0f));
+	_vertices.push_back(vec4(_width/2., _height/2., -5.f, 1.0f));
 	
 	BEGIN_OPENGL;
 	{

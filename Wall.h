@@ -15,7 +15,7 @@ public:
 
 	void draw(const mat4& projection, const mat4& view);
 	void update() {}
-	void init() {}
+	void init();
 
 	void changeColor();
 private:

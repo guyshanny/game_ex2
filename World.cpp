@@ -136,7 +136,7 @@ void World::moveLight(int key)
 			_lightPos[2] += 0.5f;
 			break;
 	}
-	printf("lightPos %f %f %f\n", _lightPos[0], _lightPos[1], _lightPos[2]);
+	//printf("lightPos %f %f %f\n", _lightPos[0], _lightPos[1], _lightPos[2]);
 }
 
 #pragma endregion
