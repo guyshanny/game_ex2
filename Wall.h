@@ -13,7 +13,7 @@ public:
 		 const int& height,
 		 const std::string textureIMG);
 
-	void draw(const mat4& projection, const mat4& view);
+	void draw(const glm::mat4& projection, const glm::mat4& view);
 	void update() {}
 	void init();
 

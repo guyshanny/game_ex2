@@ -14,8 +14,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> // for glm::value_ptr
 
-using namespace glm;
-
 #include <iostream>
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -56,17 +54,17 @@ public:
 	void turnRight();
 
 	// Getters & setters
-	mat4 getViewMatrix() { return _view; }
-	vec3 getPosition() { return _position; }
+	glm::mat4 getViewMatrix() { return _view; }
+	glm::vec3 getPosition() { return _position; }
 
 private:
-	vec3 _direction;
-	vec3 _position;
-	vec3 _up;
-	vec3 _initialDirection;
-	vec3 _initialPosition;
+	glm::vec3 _direction;
+	glm::vec3 _position;
+	glm::vec3 _up;
+	glm::vec3 _initialDirection;
+	glm::vec3 _initialPosition;
 
-	mat4 _view;
+	glm::mat4 _view;
 
 	// Moving camera properties
 	float _speed;
@@ -82,7 +80,7 @@ private:
 	Camera();
 	static Camera* _instance;
 
-	mat4 Camera::_calculateViewMatrix();
+	glm::mat4 Camera::_calculateViewMatrix();
 };
 
 #endif

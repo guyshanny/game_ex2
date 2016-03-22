@@ -18,9 +18,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 
-#define SHADERS_DIR "shaders/"
-
-#define _USE_MATH_DEFINES
 #include <math.h>
 
 // Objects
@@ -64,8 +61,8 @@ void World::init()
 
 void World::_createSceneObjects()
 {
-	_objects.push_back((Object*)(new Teapot(_programID, "textures\teapot.jpg")));
- 	_objects.push_back((Object*)(new Wall(_programID, WRAPPING_CUBE_SIZE/2, WRAPPING_CUBE_SIZE/2, "textures\\wall.bmp")));
+ 	_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\teapotMesh.off")));
+	_objects.push_back((Object*)(new Wall(_programID, 5, 5, "textures\\wall.bmp")));
 }
 #pragma endregion
 
@@ -74,7 +71,7 @@ void World::draw()
 {
 	// Camera handling
 	_camera->update();
-	mat4 view = _camera->getViewMatrix();
+	glm::mat4 view = _camera->getViewMatrix();
 
 	// Drawing the world
 	_drawWorld(view);
@@ -87,12 +84,12 @@ void World::draw()
 	}
 }
 
-void World::_drawWorld(const mat4& view)
+void World::_drawWorld(const glm::mat4& view)
 {
 	BEGIN_OPENGL
 	{
 		// Get a handle for our "gEyePosition" uniform
-		vec3 cameraPosition = _camera->getPosition();
+		glm::vec3 cameraPosition = _camera->getPosition();
 		GLuint cameraID = glGetUniformLocation(_programID, "gEyePosition");
 		glUniform3f(cameraID, cameraPosition.x, cameraPosition.y, cameraPosition.z);
 		// Get a handle for our "gLightPosition" uniform

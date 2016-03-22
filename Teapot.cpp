@@ -1,15 +1,14 @@
 #include "Teapot.h"
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include "GlobalFunctions.h"
 
-Teapot::Teapot(const GLuint& programID, const std::string textureIMG) :
-	Object(programID, vec3(0.f, 0.f, 0.f), vec3(0.0f), 0, 0, textureIMG),
+Teapot::Teapot(const GLuint& programID, const std::string textureIMG, const std::string meshPath) :
+	Object(programID, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.0f), 0, 0, textureIMG, meshPath),
 	_colorIndicator(0)
 {
 	// Params
-	_color = vec4(0, 0, 1, 1);
-	_textureID = InitTexture(TEXTURE_IMG);
+	_color = glm::vec4(0, 0, 1, 1);
+	_textureID = InitTexture(_textureImg.c_str());
 
 	// InitialPosition
 	float angle = -1;
@@ -17,7 +16,7 @@ Teapot::Teapot(const GLuint& programID, const std::string textureIMG) :
 	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
 }
 
-void Teapot::draw(const mat4 & projection, const mat4 & view)
+void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view)
 {
 	_useMVP(projection, view);
 
@@ -36,6 +35,14 @@ void Teapot::draw(const mat4 & projection, const mat4 & view)
 		glutSwapBuffers();
 	}
 	END_OPENGL;
+}
+
+void Teapot::init()
+{
+
+
+
+
 }
 
 void Teapot::changeColor()

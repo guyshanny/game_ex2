@@ -3,17 +3,19 @@
 
 #include "Object.h"
 
-// Shader's uniform's variables
-#define TEXTURE_IMG "textures\teapot.jpg"
+#include <OpenMesh/Core/IO/MeshIO.hh>
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+
+typedef OpenMesh::PolyMesh_ArrayKernelT<> Mesh;
 
 class Teapot : Object
 {
 public:
-	Teapot(const GLuint& programID, const std::string textureIMG);
+	Teapot(const GLuint& programID, const std::string textureIMG, const std::string meshPath);
 
-	void draw(const mat4& projection, const mat4& view);
+	void draw(const glm::mat4& projection, const glm::mat4& view);
 	void update() {}
-	void init() {}
+	void init();
 
 	void changeColor();
 private:

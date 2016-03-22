@@ -1,7 +1,7 @@
 #include "Object.h"
 
 
-Object::Object(const std::string textureIMG = "") : _programID(NULL), _textureID(NULL), _model(1.0), _position(0.0f), _direction(0.0f), _initialPosition(0.0f), _initialDirection(0.0f), _vao(0), _vbo(0), _textureImg(textureIMG)
+Object::Object(const std::string textureIMG = "", const std::string meshPath = "") : _programID(NULL), _textureID(NULL), _model(1.0), _position(0.0f), _direction(0.0f), _initialPosition(0.0f), _initialDirection(0.0f), _vao(0), _vbo(0), _textureImg(textureIMG)
 {
 	if (NULL < _textureImg.size())
 	{
@@ -10,11 +10,12 @@ Object::Object(const std::string textureIMG = "") : _programID(NULL), _textureID
 }
 
 Object::Object(const GLuint& programID,
-				const vec3 & position,
-				const vec3 & direction,
+				const glm::vec3 & position,
+				const glm::vec3 & direction,
 				const GLuint& vao,
 				const GLint& vbo,
-				const std::string textureIMG = "") :
+				const std::string textureIMG = "",
+				const std::string meshPath = "") :
 	_programID(programID),
 	_position(position),
 	_direction(direction),
@@ -22,7 +23,8 @@ Object::Object(const GLuint& programID,
 	_initialDirection(direction),
 	_vao(vao),
 	_vbo(vbo),
-	_textureImg(textureIMG)
+	_textureImg(textureIMG),
+	_meshPath(meshPath)
 {
 	if (NULL < _textureImg.size())
 	{
@@ -30,7 +32,7 @@ Object::Object(const GLuint& programID,
 	}
 }
 
-void Object::_useMVP(const mat4 & projection, const mat4 & view)
+void Object::_useMVP(const glm::mat4 & projection, const glm::mat4 & view)
 {
 	BEGIN_OPENGL
 	{

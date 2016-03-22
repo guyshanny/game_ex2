@@ -13,11 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{07ce7506-3dd7-4b1c-a706-bc5f76fcbdbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="textures">
+      <UniqueIdentifier>{efd69751-03dc-4982-a7fa-8191f2783a92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="packages\glm.0.9.7.1\build\native\include\glm\detail\glm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,12 +45,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="phong.frag" />
-    <None Include="phong.vert" />
+    <None Include="shaders\phong.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\phong.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.jpg">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\teapot.jpg">
+      <Filter>textures</Filter>
+    </Image>
+    <Image Include="textures\wall.bmp">
+      <Filter>textures</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

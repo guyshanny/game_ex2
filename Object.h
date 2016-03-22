@@ -19,7 +19,6 @@
 #define TEXTURE_SAMPLER "gTextureSampler"
 #define MATERIAL_COLOR "gMaterialColor"
 
-using namespace glm;
 
 class Object
 {
@@ -30,25 +29,27 @@ protected:
 
 	// Position stuff
 	glm::mat4 _model;
-	vec3 _position;
-	vec3 _direction;
-	vec3 _initialPosition;
-	vec3 _initialDirection;
+	glm::vec3 _position;
+	glm::vec3 _direction;
+	glm::vec3 _initialPosition;
+	glm::vec3 _initialDirection;
 
 	// Object's properties
 	glm::vec4 _color;
 	GLuint _textureID;
 	const std::string _textureImg;
+	const std::string _meshPath;
 
-	Object(const std::string textureIMG);
+	Object(const std::string textureIMG, const std::string meshPath);
 	Object(const GLuint& programID, 
-		   const vec3 & position, 
-		   const vec3 & direction, 
+		   const glm::vec3 & position,
+		   const glm::vec3 & direction,
 		   const GLuint& vao, 
 		   const GLint& vbo,
-		   const std::string textureIMG);
+		   const std::string textureIMG,
+		   const std::string meshPath);
 
-	void _useMVP(const mat4& projection, const mat4& view);
+	void _useMVP(const glm::mat4& projection, const glm::mat4& view);
 
 public:
 	virtual ~Object() {};
@@ -57,12 +58,12 @@ public:
 	virtual void update() = 0;
 
 	// Draws the object
-	virtual void draw(const mat4& projection, const mat4& view) = 0;
+	virtual void draw(const glm::mat4& projection, const glm::mat4& view) = 0;
 	virtual void init() = 0;
 
-	vec3 getPosition() { return _position; }
-	vec3 getDirection() { return _direction; }
-	mat4 getModel() { return _model; }
+	glm::vec3 getPosition() { return _position; }
+	glm::vec3 getDirection() { return _direction; }
+	glm::mat4 getModel() { return _model; }
 };
 
 #endif

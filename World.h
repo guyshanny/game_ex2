@@ -15,8 +15,6 @@
 #include "Camera.h"
 #include "Object.h"
 
-using namespace glm;
-
 #include <iostream>
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -35,7 +33,7 @@ class World {
 	float _width, _height, _offsetX, _offsetY;
 
 	// MVP matrices
-	mat4 _projection;
+	glm::mat4 _projection;
 
 	// Camera variables
 	Camera* _camera;
@@ -45,7 +43,7 @@ class World {
 	void _createSceneObjects();
 	glm::vec4 _lightPos;
 
-	void _drawWorld(const mat4& view);
+	void _drawWorld(const glm::mat4& view);
 
 public:
 	World(const GLuint& programID);

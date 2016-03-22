@@ -9,12 +9,14 @@
 
 #include "World.h"
 
+#define SHADERS_VERTEX "shaders\\phong.vert"
+#define SHADERS_FRAGMENT "shaders\\phong.frag"
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //												Globals											  //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 World* _world;
-
-int g_colormode = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //												Controls										  //
@@ -132,7 +134,7 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
 void init( void )
 {
     // Load shaders and use the resulting shader program
-    GLuint programID = InitShader( "phong.vert", "phong.frag" );
+    GLuint programID = InitShader(SHADERS_VERTEX, SHADERS_FRAGMENT);
 	glUseProgram(programID);
 
 	glEnable(GL_DEPTH_TEST);
@@ -222,7 +224,7 @@ int main( int argc, char **argv )
 {
 	glutInit(&argc, argv);
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(WRAPPING_CUBE_SIZE, WRAPPING_CUBE_SIZE);
+    glutInitWindowSize(512, 512);
     glutCreateWindow(argv[0]);
     
 	glewInit();

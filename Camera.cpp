@@ -8,7 +8,7 @@ Camera::Camera() : _direction(0, 0, -15),
 					_up(0, 1, 0),
 					_initialPosition(_position),
 					_initialDirection(_direction),
-					_speed(0.1f)
+					_speed(0.05f)
 {
 	for (int i = 0; i < Commands::NUM_OF_COMMANDS; i++)
 	{
@@ -33,7 +33,7 @@ void Camera::update()
 	if (_commands[Commands::TURN_LEFT]) { _turnLeftLogic(); }
 }
 
-mat4 Camera::_calculateViewMatrix()
+glm::mat4 Camera::_calculateViewMatrix()
 {
 	_view = lookAt(_position, _position + _direction, _up);
 	return _view;
@@ -50,8 +50,8 @@ void Camera::_moveForwardLogic()
 {
 	_commands[Commands::MOVE_FORWARD] = false;
 
-	vec3 tmpPos = _position + _direction*_speed;
-	if (glm::abs(tmpPos.x) >= WINDOW_BOUNDARY.x || glm::abs(tmpPos.z) >= WINDOW_BOUNDARY.z)
+	glm::vec3 tmpPos = _position + _direction*_speed;
+	if (glm::abs(tmpPos.x) >= WRAPPING_CUBE_SIZE/2 || tmpPos.z > WRAPPING_CUBE_SIZE || tmpPos.z < 1)
 	{
 		return;
 	}
@@ -63,8 +63,8 @@ void Camera::_moveBackwardLogic()
 {
 	_commands[Commands::MOVE_BACKWARD] = false;
 
-	vec3 tmpPos = _position - _direction*_speed;
-	if (glm::abs(tmpPos.x) >= WINDOW_BOUNDARY.x || glm::abs(tmpPos.z) >= WINDOW_BOUNDARY.z)
+	glm::vec3 tmpPos = _position - _direction*_speed;
+	if (glm::abs(tmpPos.x) >= WRAPPING_CUBE_SIZE || glm::abs(tmpPos.z) > WRAPPING_CUBE_SIZE || tmpPos.z < 1)
 	{
 		return;
 	}
