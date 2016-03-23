@@ -17,16 +17,12 @@ class Object : public MinimalObject
 {
 protected:
 	// Shaders' stuff
-	GLuint _programID;
 	GLuint _vao, _vbo, _ebo;
 
 	// MVP
 	glm::mat4 _model;
 
 	// Object's properties
-	glm::vec3 _position;
-	glm::vec3 _direction;
-	glm::vec4 _color;
 	GLuint _textureID;
 	const std::string _textureImg;
 
