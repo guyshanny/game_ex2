@@ -9,6 +9,7 @@ Wall::Wall(const GLuint & programID,
 	_height(height)
 {
 	_color = glm::vec4(1, 0, 1, 1);
+	_model = glm::translate(_model, glm::vec3(0, 0, -5.0f));
 }
 
 void Wall::init()
@@ -64,6 +65,7 @@ void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view)
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glBindVertexArray(_vao);
+		glUniform1i(glGetUniformLocation(_programID, "isTeapot"), false);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertices.size());
 		glBindVertexArray(0);
 	}

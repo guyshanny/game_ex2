@@ -28,6 +28,8 @@ void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view)
 		// Draw mesh
 		glBindVertexArray(_vao);
 
+		glUniform1i(glGetUniformLocation(_programID, "isTeapot"), true);
+
 		glDrawElements(GL_TRIANGLES, _mesh.n_faces() * 3, GL_UNSIGNED_INT, 0);
 
 		// Unbind the Vertex Array object
