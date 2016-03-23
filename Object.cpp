@@ -1,30 +1,13 @@
 #include "Object.h"
 
 
-Object::Object(const std::string textureIMG = "", const std::string meshPath = "") : _programID(NULL), _textureID(NULL), _model(1.0), _position(0.0f), _direction(0.0f), _initialPosition(0.0f), _initialDirection(0.0f), _vao(0), _vbo(0), _textureImg(textureIMG)
-{
-	if (NULL < _textureImg.size())
-	{
-		_textureID = InitTexture(_textureImg.c_str());
-	}
-}
-
 Object::Object(const GLuint& programID,
 				const glm::vec3 & position,
 				const glm::vec3 & direction,
-				const GLuint& vao,
-				const GLint& vbo,
-				const std::string textureIMG = "",
-				const std::string meshPath = "") :
-	_programID(programID),
-	_position(position),
-	_direction(direction),
-	_initialPosition(position),
-	_initialDirection(direction),
-	_vao(vao),
-	_vbo(vbo),
-	_textureImg(textureIMG),
-	_meshPath(meshPath)
+				const glm::vec4 & color,
+				const std::string textureIMG = "") :
+	MinimalObject(programID, position, direction, color),
+	_textureImg(textureIMG)
 {
 	if (NULL < _textureImg.size())
 	{
@@ -46,5 +29,6 @@ void Object::_useMVP(const glm::mat4 & projection, const glm::mat4 & view)
 		GLuint modelMatrixID = glGetUniformLocation(_programID, "gModel");
 		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &_model[0][0]);
 	}
+
 	END_OPENGL
 }

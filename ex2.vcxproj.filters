@@ -42,13 +42,28 @@
     <ClCompile Include="GlobalFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\phong.frag">
+    <None Include="shaders\phongV1.2.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\phong.vert">
+    <None Include="shaders\phongV1.2.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\phongV3.3.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\phongV3.3.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\phongV3.3Simple.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\phongV3.3Simple.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
@@ -83,6 +98,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GlobalFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MinimalObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,8 +9,8 @@
 
 #include "World.h"
 
-#define SHADERS_VERTEX "shaders\\phong.vert"
-#define SHADERS_FRAGMENT "shaders\\phong.frag"
+#define SHADERS_VERTEX "shaders\\phongV3.3Simple.vert"
+#define SHADERS_FRAGMENT "shaders\\phongV3.3Simple.frag"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +151,9 @@ void display( void )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );     // clear the window
 
 	_world->draw();
+
+	// Swap those buffers so someone will actually see the results... //
+	glutSwapBuffers();
 }
 
 void keyboard( unsigned char key, int x, int y )

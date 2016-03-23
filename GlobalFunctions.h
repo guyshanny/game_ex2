@@ -1,8 +1,5 @@
-#ifndef __GLOBAL_FUNCTIONS_H
-#define __GLOBAL_FUNCTIONS_H
+#pragma once
 
 #include <GL/glew.h>
 
 GLuint InitTexture(const char* fName);
-
-#endif

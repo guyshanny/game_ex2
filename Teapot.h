@@ -1,12 +1,6 @@
-#ifndef __TEAPOT_H
-#define __TEAPOT_H
+#pragma once
 
 #include "Object.h"
-
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-
-typedef OpenMesh::PolyMesh_ArrayKernelT<> Mesh;
 
 class Teapot : Object
 {
@@ -20,6 +14,11 @@ public:
 	void changeColor();
 private:
 	int _colorIndicator;
-};
+	
+	Mesh _mesh;
+	const std::string _meshPath;
+	std::vector<GLuint> _triangles;
+	
 
-#endif
+	BOOL _loadMesh();
+};

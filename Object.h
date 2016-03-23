@@ -1,69 +1,47 @@
-#ifndef __OBJECT_H
-#define __OBJECT_H
+#pragma once
 
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-#include "glm/gtc/matrix_transform.hpp"
-#include <glm/gtc/type_ptr.hpp>
-#include <string>
-#include "Globals.h"
+#include "MinimalObject.h"
+
 #include "GlobalFunctions.h"
-
-#include <GL/glew.h>
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/freeglut.h>
-#endif
 
 #define TEXTURE_SAMPLER "gTextureSampler"
 #define MATERIAL_COLOR "gMaterialColor"
 
+#include <OpenMesh/Core/IO/MeshIO.hh>
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 
-class Object
+typedef OpenMesh::PolyMesh_ArrayKernelT<> Mesh;
+
+
+class Object : public MinimalObject
 {
 protected:
 	// Shaders' stuff
-	GLuint _vao, _vbo;
 	GLuint _programID;
+	GLuint _vao, _vbo, _ebo;
 
-	// Position stuff
+	// MVP
 	glm::mat4 _model;
-	glm::vec3 _position;
-	glm::vec3 _direction;
-	glm::vec3 _initialPosition;
-	glm::vec3 _initialDirection;
 
 	// Object's properties
+	glm::vec3 _position;
+	glm::vec3 _direction;
 	glm::vec4 _color;
 	GLuint _textureID;
 	const std::string _textureImg;
-	const std::string _meshPath;
 
-	Object(const std::string textureIMG, const std::string meshPath);
+	std::vector<glm::vec4> _vertices;
+
 	Object(const GLuint& programID, 
 		   const glm::vec3 & position,
 		   const glm::vec3 & direction,
-		   const GLuint& vao, 
-		   const GLint& vbo,
-		   const std::string textureIMG,
-		   const std::string meshPath);
+		   const glm::vec4 & color,
+		   const std::string textureIMG);
 
 	void _useMVP(const glm::mat4& projection, const glm::mat4& view);
 
 public:
 	virtual ~Object() {};
 
-	// Updates the object's params if needed (does in each render frame)
-	virtual void update() = 0;
-
-	// Draws the object
-	virtual void draw(const glm::mat4& projection, const glm::mat4& view) = 0;
-	virtual void init() = 0;
-
-	glm::vec3 getPosition() { return _position; }
-	glm::vec3 getDirection() { return _direction; }
 	glm::mat4 getModel() { return _model; }
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __WALL_H
-#define __WALL_H
+#pragma once
 
 #include "Object.h"
 #include <vector>
@@ -9,8 +8,8 @@ class Wall : Object
 {
 public:
 	Wall(const GLuint& programID, 
-		 const int& width,
-		 const int& height,
+		 const float& width,
+		 const float& height,
 		 const std::string textureIMG);
 
 	void draw(const glm::mat4& projection, const glm::mat4& view);
@@ -19,11 +18,6 @@ public:
 
 	void changeColor();
 private:
-	int _width;
-	int _height;
-	std::vector<glm::vec4> _vertices;
-
-	void _buildWall();
+	float _width;
+	float _height;
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __CAMERA_H
-#define __CAMERA_H
+#pragma  once
 
 
 #include <GL/glew.h>
@@ -82,5 +81,3 @@ private:
 
 	glm::mat4 Camera::_calculateViewMatrix();
 };
-
-#endif

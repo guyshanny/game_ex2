@@ -24,13 +24,16 @@
 #include "Teapot.h"
 #include "Wall.h"
 
-World::World(const GLuint& programID) : _programID(programID), _lightPos(4, 4, 4, 1)
+World::World(const GLuint& programID) : _programID(programID)
 {
 	// Projection matrix : 45?Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	_projection = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
 	
 	// Camera handling
 	_camera = Camera::instance();
+
+	// Light object
+ 	_light = new Light(_programID, glm::vec3(4, 4, 4), glm::vec4());
 
 	// Create scene objects
 	_createSceneObjects();
@@ -45,14 +48,16 @@ World::~World()
 	}
 	_objects.clear();
 
-	// Camera
 	delete _camera;
+ 	delete _light;
+
 }
 
 #pragma region Init
 void World::init()
 {
 	_camera->init(0);
+	_light->init();
 	for (Object* object : _objects)
 	{
 		object->init();
@@ -61,8 +66,8 @@ void World::init()
 
 void World::_createSceneObjects()
 {
- 	_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\teapotMesh.off")));
-	_objects.push_back((Object*)(new Wall(_programID, 5, 5, "textures\\wall.bmp")));
+   	//_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\teapotMesh.off")));
+ 	_objects.push_back((Object*)(new Wall(_programID, 20, 10, "textures\\wall.bmp")));
 }
 #pragma endregion
 
@@ -94,7 +99,8 @@ void World::_drawWorld(const glm::mat4& view)
 		glUniform3f(cameraID, cameraPosition.x, cameraPosition.y, cameraPosition.z);
 		// Get a handle for our "gLightPosition" uniform
 		GLuint lightID = glGetUniformLocation(_programID, "gLightPosition");
-		glUniform4f(lightID, _lightPos.x, _lightPos.y, _lightPos.z, _lightPos.w);
+		glm::vec3 lightPos = _light->getPosition();
+		glUniform4f(lightID, lightPos.x, lightPos.y, lightPos.z, 1.0f);
 	}
 	END_OPENGL
 }
@@ -112,27 +118,29 @@ void World::changeColorKeyPressed()
 }
 void World::moveLight(int key)
 {
-	switch (key)
-	{
-		case GLUT_KEY_LEFT:
-			_lightPos[0] -= 0.5f;
-			break;
-		case GLUT_KEY_RIGHT:
-			_lightPos[0] += 0.5f;
-			break;
-		case GLUT_KEY_UP:
-			_lightPos[1] += 0.5f;
-			break;
-		case GLUT_KEY_DOWN:
-			_lightPos[1] -= 0.5f;
-			break;
-		case GLUT_KEY_PAGE_UP:
-			_lightPos[2] -= 0.5f;
-			break;
-		case GLUT_KEY_PAGE_DOWN:
-			_lightPos[2] += 0.5f;
-			break;
-	}
+// 	glm::vec3 lightPos = _light->getPosition();
+// 
+// 	switch (key)
+// 	{
+// 		case GLUT_KEY_LEFT:
+// 			lightPos[0] -= 0.5f;
+// 			break;
+// 		case GLUT_KEY_RIGHT:
+// 			lightPos[0] += 0.5f;
+// 			break;
+// 		case GLUT_KEY_UP:
+// 			lightPos[1] += 0.5f;
+// 			break;
+// 		case GLUT_KEY_DOWN:
+// 			lightPos[1] -= 0.5f;
+// 			break;
+// 		case GLUT_KEY_PAGE_UP:
+// 			lightPos[2] -= 0.5f;
+// 			break;
+// 		case GLUT_KEY_PAGE_DOWN:
+// 			lightPos[2] += 0.5f;
+// 			break;
+// 	}
 	//printf("lightPos %f %f %f\n", _lightPos[0], _lightPos[1], _lightPos[2]);
 }
 

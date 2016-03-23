@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GlobalFunctions.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Teapot.cpp" />
@@ -125,8 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\phong.frag" />
-    <None Include="shaders\phong.vert" />
+    <None Include="shaders\phongV3.3.frag" />
+    <None Include="shaders\phongV3.3.vert" />
+    <None Include="shaders\phongV1.2.frag" />
+    <None Include="shaders\phongV1.2.vert" />
+    <None Include="shaders\phongV3.3Simple.frag" />
+    <None Include="shaders\phongV3.3Simple.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.jpg" />
@@ -137,6 +142,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GlobalFunctions.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="MinimalObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Wall.h" />

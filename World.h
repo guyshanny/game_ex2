@@ -5,14 +5,14 @@
 //  Created by HUJI Computer Graphics course staff, 2013.
 //
 
-#ifndef __WORLD__
-#define __WORLD__
+#pragma once
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> // for glm::value_ptr
 #include <vector>
 #include "Camera.h"
+#include "Light.h"
 #include "Object.h"
 
 #include <iostream>
@@ -35,13 +35,11 @@ class World {
 	// MVP matrices
 	glm::mat4 _projection;
 
-	// Camera variables
-	Camera* _camera;
-
 	// Scene objects
 	std::vector<Object*> _objects;
+	Camera* _camera;
+ 	Light* _light;
 	void _createSceneObjects();
-	glm::vec4 _lightPos;
 
 	void _drawWorld(const glm::mat4& view);
 
@@ -65,5 +63,3 @@ public:
 	Camera* getCamera() { return _camera; }
 
 };
-
-#endif
