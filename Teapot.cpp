@@ -24,7 +24,6 @@ void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		// Draw mesh
 		glBindVertexArray(_vao);
 
 		// Get a handle for our "gMaterialColor" uniform
@@ -43,8 +42,6 @@ void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view)
 		glBindVertexArray(0);
 		// Teapot
 		//	glutSolidTeapot(1.0);
-
-		glutSwapBuffers();
 	}
 	END_OPENGL;
 }
@@ -155,9 +152,6 @@ void Teapot::changeColor()
 			break;
 		case 4: 
 			_color = glm::vec4(1, 1, 0, 1);
-			break;
-		
-		default:
 			break;
 	}
 }

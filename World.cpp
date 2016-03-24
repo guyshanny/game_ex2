@@ -66,16 +66,25 @@ void World::init()
 
 void World::_createSceneObjects()
 {
-	_objects.push_back((Object*)(new Wall(_programID, 20, 10, "textures\\wall.bmp")));
-   	//_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\bunny_1k.off"))); 	
+	_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\bunny_1k.off")));
+	_objects.push_back((Object*)(new Wall(_programID, 20, 10, "textures\\wall.bmp"))); 	
 }
 #pragma endregion
+
+
+void World::update()
+{
+	_camera->update();
+	for (Object* object : _objects)
+	{
+		object->update();
+	}
+}
 
 #pragma region Draw
 void World::draw()
 {
 	// Camera handling
-	_camera->update();
 	glm::mat4 view = _camera->getViewMatrix();
 
 	// Drawing the world
@@ -84,7 +93,6 @@ void World::draw()
 	// Drawing scene objects
 	for (Object* object : _objects)
 	{
-		object->update();
 		object->draw(_projection, view);
 	}
 }
@@ -94,9 +102,9 @@ void World::_drawWorld(const glm::mat4& view)
 	BEGIN_OPENGL
 	{
 		// Get a handle for our "gEyePosition" uniform
-		glm::vec3 cameraPosition = _camera->getPosition();
+		glm::vec3 camPos = _camera->getPosition();
 		GLuint cameraID = glGetUniformLocation(_programID, "gEyePosition");
-		glUniform3f(cameraID, cameraPosition.x, cameraPosition.y, cameraPosition.z);
+		glUniform3f(cameraID, camPos.x, camPos.y, camPos.z);
 		// Get a handle for our "gLightPosition" uniform
 		GLuint lightID = glGetUniformLocation(_programID, "gLightPosition");
 		glm::vec3 lightPos = _light->getPosition();
@@ -118,29 +126,29 @@ void World::changeColorKeyPressed()
 }
 void World::moveLight(int key)
 {
-// 	glm::vec3 lightPos = _light->getPosition();
-// 
-// 	switch (key)
-// 	{
-// 		case GLUT_KEY_LEFT:
-// 			lightPos[0] -= 0.5f;
-// 			break;
-// 		case GLUT_KEY_RIGHT:
-// 			lightPos[0] += 0.5f;
-// 			break;
-// 		case GLUT_KEY_UP:
-// 			lightPos[1] += 0.5f;
-// 			break;
-// 		case GLUT_KEY_DOWN:
-// 			lightPos[1] -= 0.5f;
-// 			break;
-// 		case GLUT_KEY_PAGE_UP:
-// 			lightPos[2] -= 0.5f;
-// 			break;
-// 		case GLUT_KEY_PAGE_DOWN:
-// 			lightPos[2] += 0.5f;
-// 			break;
-// 	}
+ 	glm::vec3 lightPos = _light->getPosition();
+ 
+ 	switch (key)
+ 	{
+ 		case GLUT_KEY_LEFT:
+ 			lightPos[0] -= 0.5f;
+ 			break;
+ 		case GLUT_KEY_RIGHT:
+ 			lightPos[0] += 0.5f;
+ 			break;
+ 		case GLUT_KEY_UP:
+ 			lightPos[1] += 0.5f;
+ 			break;
+ 		case GLUT_KEY_DOWN:
+ 			lightPos[1] -= 0.5f;
+ 			break;
+ 		case GLUT_KEY_PAGE_UP:
+ 			lightPos[2] -= 0.5f;
+ 			break;
+ 		case GLUT_KEY_PAGE_DOWN:
+ 			lightPos[2] += 0.5f;
+ 			break;
+ 	}
 	//printf("lightPos %f %f %f\n", _lightPos[0], _lightPos[1], _lightPos[2]);
 }
 

@@ -211,6 +211,7 @@ void update()
 	currentTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = currentTime - prevTime;
 	prevTime = currentTime;
+	_world->update();
 
 	glutPostRedisplay();
 }
@@ -222,6 +223,7 @@ int main( int argc, char **argv )
     glutInitWindowSize(512, 512);
     glutCreateWindow(argv[0]);
     
+	glewExperimental = GL_TRUE;
 	glewInit();
     init();
 

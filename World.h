@@ -48,6 +48,7 @@ public:
 	virtual ~World();
 	void init();
 	void draw();
+	void update();
 	void resize(int width, int height);
 
 	// Keyboard handling
