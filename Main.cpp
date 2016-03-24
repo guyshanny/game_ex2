@@ -9,8 +9,8 @@
 
 #include "World.h"
 
-#define SHADERS_VERTEX "shaders\\phongV3.3Simple.vert"
-#define SHADERS_FRAGMENT "shaders\\phongV3.3Simple.frag"
+#define SHADERS_VERTEX "shaders\\phongV3.3.vert"
+#define SHADERS_FRAGMENT "shaders\\phongV3.3.frag"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,8 @@ namespace Controls
 // Create a NULL-terminated string by reading the provided file
 static char* readShaderSource(const char* shaderFile)
 {
-    FILE* fp = fopen(shaderFile, "rb");
+	FILE* fp;
+	fopen_s(&fp, shaderFile, "rb");
 
     if ( fp == NULL ) { return NULL; }
 
@@ -66,46 +67,47 @@ static char* readShaderSource(const char* shaderFile)
 GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
 {
     struct Shader {
-	const char*  filename;
-	GLenum       type;
-	GLchar*      source;
-    }  shaders[2] = {
-	{ vShaderFile, GL_VERTEX_SHADER, NULL },
-	{ fShaderFile, GL_FRAGMENT_SHADER, NULL }
+		const char*  filename;
+		GLenum       type;
+		GLchar*      source;
+    }  
+	shaders[2] = {
+		{ vShaderFile, GL_VERTEX_SHADER, NULL },
+		{ fShaderFile, GL_FRAGMENT_SHADER, NULL }
     };
 
     GLuint program = glCreateProgram();
     
     for ( int i = 0; i < 2; ++i ) {
-	Shader& s = shaders[i];
-	s.source = readShaderSource( s.filename );
-	if ( shaders[i].source == NULL ) {
-	    std::cerr << "Failed to read " << s.filename << std::endl;
-	    exit( EXIT_FAILURE );
-	}
+		Shader& s = shaders[i];
+		s.source = readShaderSource( s.filename );
+		if ( shaders[i].source == NULL ) {
+			std::cerr << "Failed to read " << s.filename << std::endl;
+			exit( EXIT_FAILURE );
+		}
 
-	GLuint shader = glCreateShader( s.type );
+		GLuint shader = glCreateShader( s.type );
 
-	glShaderSource( shader, 1, (const GLchar**) &s.source, NULL );
-	glCompileShader( shader );
+		glShaderSource( shader, 1, (const GLchar**) &s.source, NULL );
+		glCompileShader( shader );
 
-	GLint  compiled;
-	glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
-	if ( !compiled ) {
-	    std::cerr << s.filename << " failed to compile:" << std::endl;
-	    GLint  logSize;
-	    glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &logSize );
-	    char* logMsg = new char[logSize];
-	    glGetShaderInfoLog( shader, logSize, NULL, logMsg );
-	    std::cerr << logMsg << std::endl;
-	    delete [] logMsg;
+		GLint  compiled;
+		glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
+		if ( !compiled ) {
+			std::cerr << s.filename << " failed to compile:" << std::endl;
+			GLint  logSize;
+			glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &logSize );
+			char* logMsg = new char[logSize];
+			glGetShaderInfoLog( shader, logSize, NULL, logMsg );
+			std::cerr << logMsg << std::endl;
+			delete [] logMsg;
 
-	    exit( EXIT_FAILURE );
-	}
+			exit( EXIT_FAILURE );
+		}
 
-	delete [] s.source;
+		delete [] s.source;
 
-	glAttachShader( program, shader );
+		glAttachShader( program, shader );
     }
 
     /* link  and error check */
@@ -114,15 +116,15 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
     GLint  linked;
     glGetProgramiv( program, GL_LINK_STATUS, &linked );
     if ( !linked ) {
-	std::cerr << "Shader program failed to link" << std::endl;
-	GLint  logSize;
-	glGetProgramiv( program, GL_INFO_LOG_LENGTH, &logSize);
-	char* logMsg = new char[logSize];
-	glGetProgramInfoLog( program, logSize, NULL, logMsg );
-	std::cerr << logMsg << std::endl;
-	delete [] logMsg;
+		std::cerr << "Shader program failed to link" << std::endl;
+		GLint  logSize;
+		glGetProgramiv( program, GL_INFO_LOG_LENGTH, &logSize);
+		char* logMsg = new char[logSize];
+		glGetProgramInfoLog( program, logSize, NULL, logMsg );
+		std::cerr << logMsg << std::endl;
+		delete [] logMsg;
 
-	exit( EXIT_FAILURE );
+		exit( EXIT_FAILURE );
     }
 
     /* use program object */
@@ -209,16 +211,6 @@ void update()
 	currentTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = currentTime - prevTime;
 	prevTime = currentTime;
-
-    // translate & rotate around x/y axis
-	static float angle = 0.0f;
-	angle += 0.1f;
-	glm::mat4 xTranslate, xRotation;
-
-	// 1st geometry translate & rotate in x & rotate in y
-	xTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)); 
-	xRotation = glm::rotate(xTranslate, angle, glm::vec3(1, 0, 0));
-// 	Model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
 
 	glutPostRedisplay();
 }

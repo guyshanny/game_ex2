@@ -19,6 +19,9 @@
     <Filter Include="textures">
       <UniqueIdentifier>{efd69751-03dc-4982-a7fa-8191f2783a92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="meshes">
+      <UniqueIdentifier>{d8c88847-b8e9-49fe-bd27-dc01ced3a06d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Object.cpp">
@@ -45,6 +48,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpenMeshObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -65,6 +71,15 @@
     </None>
     <None Include="shaders\phongV3.3Simple.vert">
       <Filter>shaders</Filter>
+    </None>
+    <None Include="meshes\teapotMesh.off">
+      <Filter>meshes</Filter>
+    </None>
+    <None Include="meshes\teapot.obj">
+      <Filter>meshes</Filter>
+    </None>
+    <None Include="meshes\bunny_1k.off">
+      <Filter>meshes</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +119,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenMeshObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

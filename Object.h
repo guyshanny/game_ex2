@@ -1,17 +1,11 @@
 #pragma once
 
 #include "MinimalObject.h"
-
 #include "GlobalFunctions.h"
+#include <vector>
 
 #define TEXTURE_SAMPLER "gTextureSampler"
 #define MATERIAL_COLOR "gMaterialColor"
-
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-
-typedef OpenMesh::PolyMesh_ArrayKernelT<> Mesh;
-
 
 class Object : public MinimalObject
 {

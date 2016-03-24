@@ -15,7 +15,6 @@
 #include <GL/freeglut.h>
 #endif
 
-
 class MinimalObject
 {
 public:
@@ -30,6 +29,7 @@ public:
 
 	glm::vec3 getPosition() { return _position; }
 	glm::vec3 getDirection() { return _direction; }
+
 protected:
 	MinimalObject(const GLuint& programID,
 		const glm::vec3& position,

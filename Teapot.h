@@ -1,24 +1,21 @@
 #pragma once
 
-#include "Object.h"
+#include "OpenMeshObject.h"
 
-class Teapot : Object
+class Teapot : OpenMeshObject
 {
 public:
-	Teapot(const GLuint& programID, const std::string textureIMG, const std::string meshPath);
+	Teapot(const GLuint& programID, const std::string textureIMG, const char*  meshPath);
 
 	void draw(const glm::mat4& projection, const glm::mat4& view);
-	void update() {}
+	void update();
 	void init();
 
 	void changeColor();
 private:
 	int _colorIndicator;
-	
-	Mesh _mesh;
-	const std::string _meshPath;
+
 	std::vector<GLuint> _triangles;
 	
-
-	BOOL _loadMesh();
+	//bool _loadMesh();
 };

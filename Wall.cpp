@@ -56,16 +56,16 @@ void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view)
 	BEGIN_OPENGL;
 	{
 		// Get a handle for our "gMaterialColor" uniform
-// 		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
-// 		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
+ 		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
+ 		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
 
-// 		glUniform1i(glGetUniformLocation(_programID, TEXTURE_SAMPLER), 0);
-// 		glActiveTexture(GL_TEXTURE0);
-// 		glBindTexture(GL_TEXTURE_2D, _textureID);
+ 		glUniform1i(glGetUniformLocation(_programID, TEXTURE_SAMPLER), 0);
+ 		glActiveTexture(GL_TEXTURE0);
+ 		glBindTexture(GL_TEXTURE_2D, _textureID);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glBindVertexArray(_vao);
-		glUniform1i(glGetUniformLocation(_programID, "isTeapot"), false);
+		//glUniform1i(glGetUniformLocation(_programID, "isTeapot"), false);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertices.size());
 		glBindVertexArray(0);
 	}

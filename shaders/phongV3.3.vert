@@ -1,6 +1,8 @@
-#version 330
+#version 330 core
 
+#define MY_PI 3.1415926
 layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 norm;
 
 // Output data will be interpolated for each fragment.
 out vec3 PositionWorldPass;
@@ -20,7 +22,10 @@ void main()
 	
 	// Output position of the vertex, in clip space : gMVP * position
 	gl_Position =  MVP * position;
-	
+//	gl_Position = position; // for glutTeapot
+
+
+
 	// Position of the vertex, in worldspace : gWorld * position
 	PositionWorldPass = (gModel * position).xyz;
 
@@ -32,9 +37,21 @@ void main()
 	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
 	vec3 LightPositionView = (gView * gLightPosition).xyz;
 	LightDirectionViewPass = LightPositionView + EyeDirectionViewPass;
-
+	
 	// Normal of the the vertex, in camera space
-	NormalViewPass = (gView * gModel * vec4(gl_Normal,0)).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.	
+	NormalViewPass = (gView * gModel * norm).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
 
-	//fragColor = vec4(0.4, 0.0, 0.2, 1.0);
+//	TexCoordPass.x = (0.5 * position.x) + 0.5;
+//	TexCoordPass.y = (0.5 * position.y) + 0.5;
+//	TexCoordPass = position.xy;
+    // Set texture coordinates using spherical mapping:
+    {
+    	float theta = atan(position.x/position.z);
+    	float phi   = atan(position.y/length(vec2(position.x,position.z)));
+    	float r     = length(position.xyz);
+    	TexCoordPass.x = 1.0 - (theta + MY_PI) / (2*MY_PI);
+    	TexCoordPass.y = 1.0 - (phi + MY_PI/2)  / MY_PI;
+    }
+//	TexCoordPass = gl_MultiTexCoord0.xy;
 }
+

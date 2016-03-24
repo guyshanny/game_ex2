@@ -67,7 +67,7 @@ void World::init()
 void World::_createSceneObjects()
 {
 	_objects.push_back((Object*)(new Wall(_programID, 20, 10, "textures\\wall.bmp")));
-   	_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\teapotMesh.off"))); 	
+   	//_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\bunny_1k.off"))); 	
 }
 #pragma endregion
 
