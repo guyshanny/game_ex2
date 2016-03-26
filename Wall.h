@@ -16,7 +16,6 @@ public:
 	void update() {}
 	void init();
 
-	void changeColor();
 private:
 	float _width;
 	float _height;

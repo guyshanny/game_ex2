@@ -24,8 +24,6 @@ void main()
 	gl_Position =  MVP * position;
 //	gl_Position = position; // for glutTeapot
 
-
-
 	// Position of the vertex, in worldspace : gWorld * position
 	PositionWorldPass = (gModel * position).xyz;
 
@@ -52,6 +50,6 @@ void main()
     	TexCoordPass.x = 1.0 - (theta + MY_PI) / (2*MY_PI);
     	TexCoordPass.y = 1.0 - (phi + MY_PI/2)  / MY_PI;
     }
+
 //	TexCoordPass = gl_MultiTexCoord0.xy;
 }
-

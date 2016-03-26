@@ -12,10 +12,9 @@ public:
 	void init();
 
 	void changeColor();
+
 private:
 	int _colorIndicator;
 
-	std::vector<GLuint> _triangles;
-	
-	//bool _loadMesh();
+	//std::vector<GLuint> _triangles;
 };

@@ -30,7 +30,6 @@ public:
 
 	OpenMeshObject(const GLuint& programID,
 				   const glm::vec3 & position,
-				   const glm::vec3 & direction,
 				   const glm::vec4 & color,
 				   const char* file_name,
 				   const std::string textureIMG);

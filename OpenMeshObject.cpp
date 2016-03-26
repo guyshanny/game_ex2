@@ -3,11 +3,10 @@
 
 OpenMeshObject::OpenMeshObject(const GLuint& programID,
 							   const glm::vec3 & position,
-							   const glm::vec3 & direction,
 							   const glm::vec4 & color,
 							   const char* file_name,
 							   const std::string textureIMG = "") :
-							   Object(programID, position, direction, color, textureIMG),
+							   Object(programID, position, color, textureIMG),
 							   _meshFile(file_name)
 {
 }
@@ -38,7 +37,7 @@ void OpenMeshObject::init()
 			_vertices.push_back(glm::vec4(normalize(p[0], 0),
 										  normalize(p[1], 1),
 										  normalize(p[2], 2),
-										  1.f));
+										  1));
 
 			//sort out colours
 			for (int i = 0; i < 3; i++)
@@ -124,10 +123,5 @@ void OpenMeshObject::calculate_vertex_normal(const Mesh::VertexHandle &vHandle, 
 {
 	OpenMesh::VectorT<float, 3> meshNorm;
 	meshNorm = _mesh.calc_vertex_normal(vHandle);
-	_vertices.push_back(glm::vec4(meshNorm[0], meshNorm[1], meshNorm[2], 0.f));
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	_verticesAvgNormal.push_back(meshNorm[i]);
-	//}
-	//_verticesAvgNormal.push_back(0.f);
+	_vertices.push_back(glm::vec4(meshNorm[0], meshNorm[1], meshNorm[2], 0));
 }

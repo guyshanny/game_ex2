@@ -33,7 +33,7 @@ World::World(const GLuint& programID) : _programID(programID)
 	_camera = Camera::instance();
 
 	// Light object
- 	_light = new Light(_programID, glm::vec3(4, 4, 4), glm::vec4());
+ 	_light = new Light(_programID, glm::vec3(4, 4, 0.1), glm::vec4(1, 1, 0.88, 1));
 
 	// Create scene objects
 	_createSceneObjects();
@@ -50,7 +50,6 @@ World::~World()
 
 	delete _camera;
  	delete _light;
-
 }
 
 #pragma region Init
@@ -67,7 +66,7 @@ void World::init()
 void World::_createSceneObjects()
 {
 	_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\bunny_1k.off")));
-	_objects.push_back((Object*)(new Wall(_programID, 20, 10, "textures\\wall.bmp"))); 	
+	_objects.push_back((Object*)(new Wall(_programID, 50, 50, "textures\\wall.bmp"))); 	
 }
 #pragma endregion
 
@@ -101,14 +100,18 @@ void World::_drawWorld(const glm::mat4& view)
 {
 	BEGIN_OPENGL
 	{
-		// Get a handle for our "gEyePosition" uniform
+		
 		glm::vec3 camPos = _camera->getPosition();
 		GLuint cameraID = glGetUniformLocation(_programID, "gEyePosition");
 		glUniform3f(cameraID, camPos.x, camPos.y, camPos.z);
-		// Get a handle for our "gLightPosition" uniform
-		GLuint lightID = glGetUniformLocation(_programID, "gLightPosition");
+		
+		GLuint lightPosID = glGetUniformLocation(_programID, "gLightPosition");
 		glm::vec3 lightPos = _light->getPosition();
-		glUniform4f(lightID, lightPos.x, lightPos.y, lightPos.z, 1.0f);
+		glUniform4f(lightPosID, lightPos.x, lightPos.y, lightPos.z, 1);
+
+		GLuint lightColorID = glGetUniformLocation(_programID, "gLightColor");
+		glm::vec4 lightColor = _light->getColor();
+		glUniform4f(lightColorID, lightColor.r, lightColor.g, lightColor.b, 1);
 	}
 	END_OPENGL
 }
@@ -121,35 +124,13 @@ void World::turnRightKeyPressed() { _camera->turnRight(); }
 void World::turnLeftKeyPressed() { _camera->turnLeft(); }
 void World::changeColorKeyPressed() 
 {
-	Teapot* teapot = dynamic_cast<Teapot*>(_objects.front());
+	//Teapot* teapot = dynamic_cast<Teapot*>(_objects.front()); // NOT WORKING!!
+	Teapot* teapot = (Teapot*)(_objects.front());
 	teapot->changeColor();
 }
 void World::moveLight(int key)
 {
- 	glm::vec3 lightPos = _light->getPosition();
- 
- 	switch (key)
- 	{
- 		case GLUT_KEY_LEFT:
- 			lightPos[0] -= 0.5f;
- 			break;
- 		case GLUT_KEY_RIGHT:
- 			lightPos[0] += 0.5f;
- 			break;
- 		case GLUT_KEY_UP:
- 			lightPos[1] += 0.5f;
- 			break;
- 		case GLUT_KEY_DOWN:
- 			lightPos[1] -= 0.5f;
- 			break;
- 		case GLUT_KEY_PAGE_UP:
- 			lightPos[2] -= 0.5f;
- 			break;
- 		case GLUT_KEY_PAGE_DOWN:
- 			lightPos[2] += 0.5f;
- 			break;
- 	}
-	//printf("lightPos %f %f %f\n", _lightPos[0], _lightPos[1], _lightPos[2]);
+	_light->move(key);
 }
 
 #pragma endregion

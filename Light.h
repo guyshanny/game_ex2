@@ -10,8 +10,8 @@ public:
 	void update() {};
 	void draw(const glm::mat4& projection, const glm::mat4& view) {};
 	void init() {};
+	void move(int dir);
 
 private:
-	glm::vec4 _position;
-	glm::vec4 _color;
+	float _movingSpeed;
 };

@@ -42,9 +42,6 @@
     <ClCompile Include="Teapot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalFunctions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -58,9 +55,6 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\phongV1.2.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\phongV3.3.frag">
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\phongV3.3.vert">
@@ -80,6 +74,9 @@
     </None>
     <None Include="meshes\bunny_1k.off">
       <Filter>meshes</Filter>
+    </None>
+    <None Include="shaders\phongV3.3.frag">
+      <Filter>shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +107,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Teapot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MinimalObject.h">

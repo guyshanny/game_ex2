@@ -1,4 +1,6 @@
 #version 330
+#define MY_PI 3.1415926
+#define LIGHT_MAX_ANGLE (10.0f)
 
 // Interpolated values from the vertex shaders
 in vec3 PositionWorldPass;
@@ -16,13 +18,11 @@ uniform vec4 gMaterialColor;
 uniform mat4 gView;
 uniform mat4 gModel;
 uniform vec4 gLightPosition; // light (in world)
+uniform vec4 gLightColor;
 
 void main()
-{
-	// Light emission properties
-	// You probably want to put them as uniforms
-	vec3 LightColor = vec3(1,1,1);
-	
+{	
+	vec3 lightColor = gLightColor.rgb;
 	// Material properties
 	// texture2D <-> texture ??
 	vec3 MaterialDiffuseColor = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
@@ -39,6 +39,13 @@ void main()
 	//  - light is perpendicular to the triangle -> 0
 	//  - light is behind the triangle -> 0
 	float cosTheta = clamp(dot(N, L), 0, 1);
+
+//	float theta = acos(dot(vec3(0,0,1), L));
+//	if (abs(theta) > LIGHT_MAX_ANGLE / 180 * MY_PI){
+//		outColor = vec3(0);
+//		return;
+//	}
+
 	// Eye vector (towards the camera)
 	vec3 V = normalize(EyeDirectionViewPass);
 	// Direction in which the triangle reflects the light
@@ -53,7 +60,9 @@ void main()
 		// Ambient : simulates indirect lighting
 		MaterialAmbientColor +
 		// Diffuse : "color" of the object
-		MaterialDiffuseColor * LightColor * cosTheta +
+		MaterialDiffuseColor * lightColor * cosTheta +
 		// Specular : reflective highlight, like a mirror
-		MaterialSpecularColor * LightColor * pow(cosAlpha,5);
+		MaterialSpecularColor * lightColor * pow(cosAlpha,20);
+
+//	outColor = outColor * (1/(abs(theta)*20));
 }

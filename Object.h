@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MinimalObject.h"
-#include "GlobalFunctions.h"
 #include <vector>
 
 #define TEXTURE_SAMPLER "gTextureSampler"
@@ -24,11 +23,11 @@ protected:
 
 	Object(const GLuint& programID, 
 		   const glm::vec3 & position,
-		   const glm::vec3 & direction,
 		   const glm::vec4 & color,
 		   const std::string textureIMG);
 
 	void _useMVP(const glm::mat4& projection, const glm::mat4& view);
+	GLuint initTexture(const char* fName);
 
 public:
 	virtual ~Object() {};

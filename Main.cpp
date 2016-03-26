@@ -163,34 +163,23 @@ void keyboard( unsigned char key, int x, int y )
 	switch (tolower(key))
 	{    
 		case Controls::KEY_FORWARD:
-		{
 			_world->forwardKeyPressed();
-		}
-		break;
+			break;
 		case Controls::KEY_BACKWARD:
-		{
 			_world->backwardKeyPressed();
-		}
-		break;
+			break;
 		case Controls::KEY_TURN_RIGHT:
-		{
 			_world->turnRightKeyPressed();
-		}
-		break;
+			break;
 		case Controls::KEY_TURN_LEFT:
-		{
 			_world->turnLeftKeyPressed();
-		}
-		break;
+			break;
 		case Controls::KEY_ESC:
-		{
 			exit(0);
-		}
-		break;
+			break;
 		case Controls::KEY_COLOR_CHANGE:
-		{
 			_world->changeColorKeyPressed();
-		}
+			break;
 		default:
 			std::cerr << "Key " << tolower(key) << " undefined\n";
 			break;

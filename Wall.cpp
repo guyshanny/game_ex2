@@ -4,21 +4,28 @@ Wall::Wall(const GLuint & programID,
 		   const float & width, 
 		   const float & height, 
 		   const std::string textureIMG) :
-	Object(programID, glm::vec3(0.f, 0.f, -3.f), glm::vec3(0.0f), glm::vec4(0.0f), textureIMG),
+		   //150, 22, 11
+		   Object(programID, glm::vec3(0, 0, -10), glm::vec4(0.8, 0.25, 0.1, 1), textureIMG),
 	_width(width),
 	_height(height)
 {
-	_color = glm::vec4(1, 0, 1, 1);
-	_model = glm::translate(_model, glm::vec3(0, 0, -5.0f));
 }
 
 void Wall::init()
 {
+	glm::vec3 tmp1 = glm::vec3(-_width / 2, -_height / 2, _position.z) - glm::vec3(-_width / 2, _height / 2, _position.z);
+	glm::vec3 tmp2 = glm::vec3(-_width / 2, -_height / 2, _position.z) - glm::vec3(_width / 2, -_height / 2, _position.z);
+	glm::vec3 norm = -cross(normalize(tmp1), normalize(tmp2));
+
 	// Create vertices
-	_vertices.push_back(glm::vec4(-_width / 2, -_height / 2, _position.z, 1.0f));
-	_vertices.push_back(glm::vec4(-_width / 2, _height / 2, _position.z, 1.0f));
-	_vertices.push_back(glm::vec4(_width / 2, -_height / 2, _position.z, 1.0f));
-	_vertices.push_back(glm::vec4(_width / 2, _height / 2, _position.z, 1.0f));
+	_vertices.push_back(glm::vec4(-_width / 2, -_height / 2, _position.z, 1));
+	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(-_width / 2, _height / 2, _position.z, 1));
+	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(_width / 2, -_height / 2, _position.z, 1));
+	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(_width / 2, _height / 2, _position.z, 1));
+	_vertices.push_back(glm::vec4(norm, 0));
 
 	{
 		// Create and bind the object's Vertex Array Object
@@ -41,11 +48,26 @@ void Wall::init()
 								4,          // number of scalars per vertex
 								GL_FLOAT,   // scalar type
 								GL_FALSE,
-								0,
+								sizeof(glm::vec4) * 2,//0,
 								0);
+
+		GLint _normAttr = glGetAttribLocation(_programID, "norm");
+		glEnableVertexAttribArray(_normAttr);
+		glVertexAttribPointer(_normAttr, // attribute handle
+							  4,          // number of scalars per vertex
+							  GL_FLOAT,   // scalar type
+							  GL_FALSE,
+							  sizeof(glm::vec4) * 2,
+							  (GLvoid*)(sizeof(glm::vec4)));
+
 
 		// Unbind vertex array:
 		glBindVertexArray(0);
+	}
+
+	if (0 < _textureImg.size())
+	{
+		_textureID = initTexture(_textureImg.c_str());
 	}
 }
 

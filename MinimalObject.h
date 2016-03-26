@@ -28,18 +28,16 @@ public:
 	virtual void init() = 0;
 
 	glm::vec3 getPosition() { return _position; }
-	glm::vec3 getDirection() { return _direction; }
+	glm::vec4 getColor() { return _color; }
 
 protected:
 	MinimalObject(const GLuint& programID,
 		const glm::vec3& position,
-		const glm::vec3& direction,
 		const glm::vec4& color) :
-		_programID(programID), _position(position), _direction(direction), _color(color) {};
+		_programID(programID), _position(position), _color(color) {};
 
 	GLuint _programID;
 
 	glm::vec3 _position;
-	glm::vec3 _direction;
 	glm::vec4 _color;
 };
