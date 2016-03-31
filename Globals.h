@@ -1,6 +1,6 @@
 #pragma once
 
-#define WRAPPING_CUBE_SIZE				15
+#define WRAPPING_CUBE_SIZE				100
 
 #define PROGRAM_DEFAULT_ID				"default"
 #define BEGIN_OPENGL					glUseProgram(_programID);

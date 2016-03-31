@@ -19,11 +19,12 @@ uniform vec4 gMaterialColor;
 uniform mat4 gView;
 uniform mat4 gModel;
 uniform vec4 gLightPosition; // light (in world)
+uniform vec4 gLightDirection;
 uniform vec4 gLightColor;
 
 void main()
 {	
-	vec3 gLightDirection = (gView * gModel * vec4(0,0,1, 1)).xyz; //SHOULD BE UNIFORM
+	vec3 lightDirection = (gView * gModel * gLightDirection).xyz;
 	vec3 lightColor = gLightColor.rgb;
 	// Material properties
 	// texture2D <-> texture ??
@@ -33,7 +34,7 @@ void main()
 	// Normal of the computed fragment, in camera space
 	vec3 N = normalize(NormalViewPass);
 	// Direction of the light (from the fragment to the light)
-	vec3 L = normalize(LightDirectionViewPass);
+	vec3 L = normalize(gLightDirection.xyz);
 	// Cosine of the angle between the normal and the light direction, 
 	// clamped above 0
 	//  - light is at the vertical of the triangle -> 1
@@ -51,11 +52,11 @@ void main()
 	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp(dot(V,R), 0, 1);
 
-	float gLightAttenuation = 0.00001; //SHOULD BE UNIFORM
+	float gLightAttenuation = 0.0001; //SHOULD BE UNIFORM
 	vec3 temp = LightPositionViewPass - PositionWorldPass;
 	float attenuation = 1.0 / (1.0 + gLightAttenuation * pow(length(temp), 2));
 
-	float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(gLightDirection))));
+	float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(lightDirection))));
 	if(lightToSurfaceAngle > 10){
 		attenuation = 0.0;
 	}
