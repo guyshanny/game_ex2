@@ -142,12 +142,14 @@
     <None Include="meshes\teapot.obj" />
     <None Include="meshes\teapotMesh.off" />
     <None Include="packages.config" />
-    <None Include="shaders\phongV3.3.frag" />
-    <None Include="shaders\phongV3.3.vert" />
     <None Include="shaders\phongV1.2.frag" />
     <None Include="shaders\phongV1.2.vert" />
     <None Include="shaders\phongV3.3Simple.frag" />
     <None Include="shaders\phongV3.3Simple.vert" />
+    <None Include="shaders\phong_wallV3.3.frag" />
+    <None Include="shaders\phong_wallV3.3.vert" />
+    <None Include="shaders\‏‏phong_teapotV3.3.frag" />
+    <None Include="shaders\‏‏phong_teapotV3.3.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.jpg" />

@@ -7,12 +7,14 @@
 class Wall : Object
 {
 public:
-	Wall(const GLuint& programID, 
+	Wall(const char* vShaderFile,
+		 const char* fShaderFile,
 		 const float& width,
 		 const float& height,
 		 const std::string textureIMG);
 
-	void draw(const glm::mat4& projection, const glm::mat4& view);
+	void draw(const glm::mat4& projection, const glm::mat4& view,
+			  const glm::vec3 camPos, Light* light);
 	void update() {}
 	void init();
 

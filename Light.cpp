@@ -1,7 +1,7 @@
 #include "Light.h"
 
-Light::Light(const GLuint& programID, const glm::vec3 & position, const glm::vec4 color) :
-MinimalObject(programID, position, color), _movingSpeed(0.5f)
+Light::Light(const glm::vec3& position, const glm::vec3& direction, const glm::vec4 color) :
+MinimalObject(position, color), _movingSpeed(0.5f), _direction(direction), _coneOfLight(3.01f), _attenuation(0.5f)
 {
 }
 

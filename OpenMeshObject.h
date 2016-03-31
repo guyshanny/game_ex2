@@ -28,14 +28,14 @@ protected:
 
 public:
 
-	OpenMeshObject(const GLuint& programID,
+	OpenMeshObject(const char* vShaderFile,
+				   const char* fShaderFile,
 				   const glm::vec3 & position,
 				   const glm::vec4 & color,
 				   const char* file_name,
 				   const std::string textureIMG);
 
-	/* this function computes the center of each mesh */
-	virtual void init();
+	void init();
 
 	virtual ~OpenMeshObject();
 };

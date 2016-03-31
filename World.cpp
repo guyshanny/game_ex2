@@ -24,7 +24,7 @@
 #include "Teapot.h"
 #include "Wall.h"
 
-World::World(const GLuint& programID) : _programID(programID)
+World::World()
 {
 	// Projection matrix : 45?Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	_projection = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
@@ -33,7 +33,7 @@ World::World(const GLuint& programID) : _programID(programID)
 	_camera = Camera::instance();
 
 	// Light object
- 	_light = new Light(_programID, glm::vec3(4, 4, 0.1), glm::vec4(1, 1, 0.88, 1));
+	_light = new Light(glm::vec3(2, 2, 0.5), glm::vec3(0, 0, 1), glm::vec4(1, 1, 0.88, 1));
 
 	// Create scene objects
 	_createSceneObjects();
@@ -65,8 +65,8 @@ void World::init()
 
 void World::_createSceneObjects()
 {
-	_objects.push_back((Object*)(new Teapot(_programID, "textures\\teapot.jpg", "meshes\\bunny_1k.off")));
-	_objects.push_back((Object*)(new Wall(_programID, 50, 50, "textures\\wall.bmp"))); 	
+	_objects.push_back((Object*)(new Teapot("shaders\\þþphong_teapotV3.3.vert", "shaders\\þþphong_teapotV3.3.frag", "textures\\teapot.jpg", "meshes\\teapot.obj")));
+	_objects.push_back((Object*)(new Wall("shaders\\phong_wallV3.3.vert", "shaders\\phong_wallV3.3.frag", 100, 100, "textures\\wall.bmp")));
 }
 #pragma endregion
 
@@ -81,43 +81,23 @@ void World::update()
 }
 
 #pragma region Draw
+
 void World::draw()
 {
 	// Camera handling
 	glm::mat4 view = _camera->getViewMatrix();
 
-	// Drawing the world
-	_drawWorld(view);
-
 	// Drawing scene objects
 	for (Object* object : _objects)
 	{
-		object->draw(_projection, view);
+		object->draw(_projection, view, _camera->getPosition(), _light);
 	}
 }
 
-void World::_drawWorld(const glm::mat4& view)
-{
-	BEGIN_OPENGL
-	{
-		
-		glm::vec3 camPos = _camera->getPosition();
-		GLuint cameraID = glGetUniformLocation(_programID, "gEyePosition");
-		glUniform3f(cameraID, camPos.x, camPos.y, camPos.z);
-		
-		GLuint lightPosID = glGetUniformLocation(_programID, "gLightPosition");
-		glm::vec3 lightPos = _light->getPosition();
-		glUniform4f(lightPosID, lightPos.x, lightPos.y, lightPos.z, 1);
-
-		GLuint lightColorID = glGetUniformLocation(_programID, "gLightColor");
-		glm::vec4 lightColor = _light->getColor();
-		glUniform4f(lightColorID, lightColor.r, lightColor.g, lightColor.b, 1);
-	}
-	END_OPENGL
-}
 #pragma endregion
 
 #pragma region KeysHandling
+
 void World::forwardKeyPressed() { _camera->moveForward(); }
 void World::backwardKeyPressed() { _camera->moveBackward(); }
 void World::turnRightKeyPressed() { _camera->turnRight(); }

@@ -24,17 +24,16 @@ public:
 	virtual void update() = 0;
 
 	// Draws the object
-	virtual void draw(const glm::mat4& projection, const glm::mat4& view) = 0;
 	virtual void init() = 0;
 
 	glm::vec3 getPosition() { return _position; }
 	glm::vec4 getColor() { return _color; }
 
 protected:
-	MinimalObject(const GLuint& programID,
-		const glm::vec3& position,
-		const glm::vec4& color) :
-		_programID(programID), _position(position), _color(color) {};
+	MinimalObject(const glm::vec3& position, const glm::vec4& color) :
+		_position(position), _color(color)
+	{
+	};
 
 	GLuint _programID;
 

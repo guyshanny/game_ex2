@@ -1,9 +1,10 @@
 #include "Teapot.h"
 #include <math.h>
 
-Teapot::Teapot(const GLuint& programID, const std::string textureIMG, const char*  meshPath) :
-	OpenMeshObject(programID, glm::vec3(0, 0, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
-	_colorIndicator(0)
+Teapot::Teapot(const char* vShaderFile, const char* fShaderFile, 
+			   const std::string textureIMG, const char*  meshPath) :
+			   OpenMeshObject(vShaderFile, fShaderFile, glm::vec3(0, 0, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
+			   _colorIndicator(0)
 {
 	// Initial position
 	float angle = -1;
@@ -11,12 +12,14 @@ Teapot::Teapot(const GLuint& programID, const std::string textureIMG, const char
 	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
 }
 
-void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view)
+void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view,
+				  const glm::vec3 camPos, Light* light)
 {
-	_useMVP(projection, view);
-
 	BEGIN_OPENGL;
 	{
+		_useMVP(projection, view);
+		setWorldUniforms(camPos, light);
+
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glBindVertexArray(_vao);
@@ -123,5 +126,5 @@ void Teapot::update()
 	// 1st geometry translate & rotate in x & rotate in y
 	glm::mat4 xTranslate = glm::translate(glm::mat4(1), glm::vec3(0, -1, 0));
 	glm::mat4 xRotation = glm::rotate(xTranslate, angle, glm::vec3(1, 0, 0));
-	//_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
+	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
 }

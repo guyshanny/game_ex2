@@ -22,7 +22,6 @@ void main()
 	
 	// Output position of the vertex, in clip space : gMVP * position
 	gl_Position =  MVP * position;
-//	gl_Position = position; // for glutTeapot
 
 	// Position of the vertex, in worldspace : gWorld * position
 	PositionWorldPass = (gModel * position).xyz;
@@ -39,10 +38,7 @@ void main()
 	// Normal of the the vertex, in camera space
 	NormalViewPass = (gView * gModel * norm).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
 
-//	TexCoordPass.x = (0.5 * position.x) + 0.5;
-//	TexCoordPass.y = (0.5 * position.y) + 0.5;
-//	TexCoordPass = position.xy;
-    // Set texture coordinates using spherical mapping:
+	// Set texture coordinates using spherical mapping:
     {
     	float theta = atan(position.x/position.z);
     	float phi   = atan(position.y/length(vec2(position.x,position.z)));
@@ -50,6 +46,4 @@ void main()
     	TexCoordPass.x = 1.0 - (theta + MY_PI) / (2*MY_PI);
     	TexCoordPass.y = 1.0 - (phi + MY_PI/2)  / MY_PI;
     }
-
-//	TexCoordPass = gl_MultiTexCoord0.xy;
 }

@@ -1,18 +1,20 @@
 #include "OpenMeshObject.h"
 #include <OpenMesh/Core/IO/MeshIO.hh>
 
-OpenMeshObject::OpenMeshObject(const GLuint& programID,
+OpenMeshObject::OpenMeshObject(const char* vShaderFile,
+							   const char* fShaderFile,
 							   const glm::vec3 & position,
 							   const glm::vec4 & color,
 							   const char* file_name,
 							   const std::string textureIMG = "") :
-							   Object(programID, position, color, textureIMG),
+							   Object(vShaderFile, fShaderFile, position, color, textureIMG),
 							   _meshFile(file_name)
 {
 }
 
 void OpenMeshObject::init()
 {
+	Object::init();
 	if (!loadMesh()) return;
 	computeBoundingBox();
 

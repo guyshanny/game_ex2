@@ -1,11 +1,12 @@
 #include "Wall.h"
 
-Wall::Wall(const GLuint & programID, 
+Wall::Wall(const char* vShaderFile,
+		   const char* fShaderFile,
 		   const float & width, 
 		   const float & height, 
 		   const std::string textureIMG) :
 		   //150, 22, 11
-		   Object(programID, glm::vec3(0, 0, -10), glm::vec4(0.8, 0.25, 0.1, 1), textureIMG),
+		   Object(vShaderFile, fShaderFile, glm::vec3(0, 0, -50), glm::vec4(0.8, 0.25, 0.1, 1), textureIMG),
 	_width(width),
 	_height(height)
 {
@@ -13,19 +14,28 @@ Wall::Wall(const GLuint & programID,
 
 void Wall::init()
 {
+	Object::init();
 	glm::vec3 tmp1 = glm::vec3(-_width / 2, -_height / 2, _position.z) - glm::vec3(-_width / 2, _height / 2, _position.z);
 	glm::vec3 tmp2 = glm::vec3(-_width / 2, -_height / 2, _position.z) - glm::vec3(_width / 2, -_height / 2, _position.z);
 	glm::vec3 norm = -cross(normalize(tmp1), normalize(tmp2));
 
 	// Create vertices
+	//lower left corner
 	_vertices.push_back(glm::vec4(-_width / 2, -_height / 2, _position.z, 1));
 	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(0, 1, 0, 0));
+	//upper left corner
 	_vertices.push_back(glm::vec4(-_width / 2, _height / 2, _position.z, 1));
 	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(0, 0, 0, 0));
+	//lower right corner
 	_vertices.push_back(glm::vec4(_width / 2, -_height / 2, _position.z, 1));
 	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(1, 1, 0, 0));
+	//upper right corner
 	_vertices.push_back(glm::vec4(_width / 2, _height / 2, _position.z, 1));
 	_vertices.push_back(glm::vec4(norm, 0));
+	_vertices.push_back(glm::vec4(1, 0, 0, 0));
 
 	{
 		// Create and bind the object's Vertex Array Object
@@ -48,7 +58,7 @@ void Wall::init()
 								4,          // number of scalars per vertex
 								GL_FLOAT,   // scalar type
 								GL_FALSE,
-								sizeof(glm::vec4) * 2,//0,
+								sizeof(glm::vec4) * 3,
 								0);
 
 		GLint _normAttr = glGetAttribLocation(_programID, "norm");
@@ -57,8 +67,17 @@ void Wall::init()
 							  4,          // number of scalars per vertex
 							  GL_FLOAT,   // scalar type
 							  GL_FALSE,
-							  sizeof(glm::vec4) * 2,
+							  sizeof(glm::vec4) * 3,
 							  (GLvoid*)(sizeof(glm::vec4)));
+
+		GLint _texAttr = glGetAttribLocation(_programID, "texCoord");
+		glEnableVertexAttribArray(_texAttr);
+		glVertexAttribPointer(_texAttr, // attribute handle
+							  4,          // number of scalars per vertex
+							  GL_FLOAT,   // scalar type
+							  GL_FALSE,
+							  sizeof(glm::vec4) * 3,
+							  (GLvoid*)(sizeof(glm::vec4) + sizeof(glm::vec4)));
 
 
 		// Unbind vertex array:
@@ -71,12 +90,14 @@ void Wall::init()
 	}
 }
 
-void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view)
+void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view,
+				const glm::vec3 camPos, Light* light)
 {
-	_useMVP(projection, view);
-
 	BEGIN_OPENGL;
 	{
+		_useMVP(projection, view); 
+		setWorldUniforms(camPos, light);
+
 		// Get a handle for our "gMaterialColor" uniform
  		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
  		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);

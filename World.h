@@ -23,11 +23,6 @@
 #endif
 
 class World {
-	// Attribute handle:
-	GLint _posAttrib;
-
-	// Program params
-	GLuint _programID;
 
 	// View port frame:
 	float _width, _height, _offsetX, _offsetY;
@@ -41,10 +36,8 @@ class World {
  	Light* _light;
 	void _createSceneObjects();
 
-	void _drawWorld(const glm::mat4& view);
-
 public:
-	World(const GLuint& programID);
+	World();
 	virtual ~World();
 	void init();
 	void draw();
@@ -58,9 +51,4 @@ public:
 	void turnLeftKeyPressed();
 	void changeColorKeyPressed();
 	void moveLight(int key);
-
-	// Getters&Setters
-	GLuint getProgramID() { return _programID; }
-	Camera* getCamera() { return _camera; }
-
 };
