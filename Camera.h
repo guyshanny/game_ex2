@@ -26,10 +26,10 @@ public:
 	// Options
 	enum Commands
 	{
-		MOVE_FORWARD,
-		MOVE_BACKWARD,
-		TURN_LEFT,
-		TURN_RIGHT,
+		MOVE_UP,
+		MOVE_DOWN,
+		MOVE_LEFT,
+		MOVE_RIGHT,
 
 		// Number of commands
 		NUM_OF_COMMANDS = 4
@@ -47,10 +47,10 @@ public:
 	void update();
 
 	// Key functions
-	void moveForward();
-	void moveBackward();
-	void turnLeft();
-	void turnRight();
+	void moveUp();
+	void moveDown();
+	void moveLeft();
+	void moveRight();
 
 	// Getters & setters
 	glm::mat4 getViewMatrix() { return _view; }
@@ -71,10 +71,10 @@ private:
 
 	// Commands
 	bool _commands[Commands::NUM_OF_COMMANDS];
-	void _moveForwardLogic();
-	void _moveBackwardLogic();
-	void _turnLeftLogic();
-	void _turnRightLogic();
+	void _moveUpLogic();
+	void _moveDownLogic();
+	void _moveLeftLogic();
+	void _moveRightLogic();
 
 	Camera();
 	static Camera* _instance;

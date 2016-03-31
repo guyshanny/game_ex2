@@ -98,10 +98,10 @@ void World::draw()
 
 #pragma region KeysHandling
 
-void World::forwardKeyPressed() { _camera->moveForward(); }
-void World::backwardKeyPressed() { _camera->moveBackward(); }
-void World::turnRightKeyPressed() { _camera->turnRight(); }
-void World::turnLeftKeyPressed() { _camera->turnLeft(); }
+void World::forwardKeyPressed() { _camera->moveUp(); }
+void World::backwardKeyPressed() { _camera->moveDown(); }
+void World::turnRightKeyPressed() { _camera->moveRight(); }
+void World::turnLeftKeyPressed() { _camera->moveLeft(); }
 void World::changeColorKeyPressed() 
 {
 	//Teapot* teapot = dynamic_cast<Teapot*>(_objects.front()); // NOT WORKING!!

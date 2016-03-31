@@ -8,7 +8,7 @@ Camera::Camera() : _direction(0, 0, -15),
 					_up(0, 1, 0),
 					_initialPosition(_position),
 					_initialDirection(_direction),
-					_speed(0.05f)
+					_speed(0.2f)
 {
 	for (int i = 0; i < Commands::NUM_OF_COMMANDS; i++)
 	{
@@ -27,10 +27,10 @@ void Camera::update()
 	/************************************************************************/
 	/* All regular controls                                                 */
 	/************************************************************************/
-	if (_commands[Commands::MOVE_FORWARD]) { _moveForwardLogic(); }
-	if (_commands[Commands::MOVE_BACKWARD]) { _moveBackwardLogic(); }
-	if (_commands[Commands::TURN_RIGHT]) { _turnRightLogic(); }
-	if (_commands[Commands::TURN_LEFT]) { _turnLeftLogic(); }
+	if (_commands[Commands::MOVE_UP]) { _moveUpLogic(); }
+	if (_commands[Commands::MOVE_DOWN]) { _moveDownLogic(); }
+	if (_commands[Commands::MOVE_RIGHT]) { _moveRightLogic(); }
+	if (_commands[Commands::MOVE_LEFT]) { _moveLeftLogic(); }
 }
 
 glm::mat4 Camera::_calculateViewMatrix()
@@ -41,54 +41,60 @@ glm::mat4 Camera::_calculateViewMatrix()
 
 #pragma region KeysHandling
 
-void Camera::moveForward() { _commands[Commands::MOVE_FORWARD] = true; }
-void Camera::moveBackward() { _commands[Commands::MOVE_BACKWARD] = true; }
-void Camera::turnLeft() { _commands[Commands::TURN_LEFT] = true; }
-void Camera::turnRight() { _commands[Commands::TURN_RIGHT] = true; }
+void Camera::moveUp() { _commands[Commands::MOVE_UP] = true; }
+void Camera::moveDown() { _commands[Commands::MOVE_DOWN] = true; }
+void Camera::moveLeft() { _commands[Commands::MOVE_LEFT] = true; }
+void Camera::moveRight() { _commands[Commands::MOVE_RIGHT] = true; }
 
-void Camera::_moveForwardLogic()
+void Camera::_moveUpLogic()
 {
-	_commands[Commands::MOVE_FORWARD] = false;
+	_commands[Commands::MOVE_UP] = false;
 
-	glm::vec3 tmpPos = _position + _direction*_speed;
-	if (glm::abs(tmpPos.x) >= WRAPPING_CUBE_SIZE/2 || tmpPos.z > WRAPPING_CUBE_SIZE || tmpPos.z < 1)
+	glm::vec3 tmpPos = _position + _up*_speed;
+	if (glm::abs(tmpPos.y) >= WRAPPING_CUBE_SIZE/2)
 	{
 		return;
 	}
-	_position += _direction * _speed;
+	_position += _up * _speed;
 	_calculateViewMatrix();
 }
 
-void Camera::_moveBackwardLogic()
+void Camera::_moveDownLogic()
 {
-	_commands[Commands::MOVE_BACKWARD] = false;
+	_commands[Commands::MOVE_DOWN] = false;
 
-	glm::vec3 tmpPos = _position - _direction*_speed;
-	if (glm::abs(tmpPos.x) >= WRAPPING_CUBE_SIZE || glm::abs(tmpPos.z) > WRAPPING_CUBE_SIZE || tmpPos.z < 1)
+	glm::vec3 tmpPos = _position - _up*_speed;
+	if (glm::abs(tmpPos.y) >= WRAPPING_CUBE_SIZE / 2)
 	{
 		return;
 	}
-	_position -= _direction * _speed;
+	_position -= _up * _speed;
 	_calculateViewMatrix();
 }
 
-void Camera::_turnLeftLogic()
+void Camera::_moveLeftLogic()
 {
-	_commands[Commands::TURN_LEFT] = false;
+	_commands[Commands::MOVE_LEFT] = false;
 
-	_angle -= _speed;
-	_direction.x = glm::sin(_angle);
-	_direction.z = -glm::cos(_angle);
+	glm::vec3 tmpPos = _position - glm::vec3(1,0,0)*_speed;
+	if (glm::abs(tmpPos.x) >= WRAPPING_CUBE_SIZE / 2)
+	{
+		return;
+	}
+	_position -= glm::vec3(1, 0, 0) * _speed;
 	_calculateViewMatrix();
 }
 
-void Camera::_turnRightLogic()
+void Camera::_moveRightLogic()
 {
-	_commands[Commands::TURN_RIGHT] = false;
+	_commands[Commands::MOVE_RIGHT] = false;
 
-	_angle += _speed;
-	_direction.x = glm::sin(_angle);
-	_direction.z = -glm::cos(_angle);
+	glm::vec3 tmpPos = _position + glm::vec3(1, 0, 0)*_speed;
+	if (glm::abs(tmpPos.x) >= WRAPPING_CUBE_SIZE / 2)
+	{
+		return;
+	}
+	_position += glm::vec3(1, 0, 0) * _speed;
 	_calculateViewMatrix();
 }
 #pragma endregion
