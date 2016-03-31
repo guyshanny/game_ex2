@@ -33,7 +33,7 @@ World::World()
 	_camera = Camera::instance();
 
 	// Light object
-	_light = new Light(glm::vec3(2, 2, 0.5), glm::vec3(0, 0, 1), glm::vec4(1, 1, 0.88, 1));
+	_light = new Light(glm::vec3(2, 2, 5), glm::vec3(0, 0, 1), glm::vec4(1, 1, 0.88, 1));
 
 	// Create scene objects
 	_createSceneObjects();

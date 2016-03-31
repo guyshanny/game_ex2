@@ -40,12 +40,6 @@ void main()
 	//  - light is behind the triangle -> 0
 	float cosTheta = clamp(dot(N, L), 0, 1);
 
-//	float theta = acos(dot(vec3(0,0,1), L));
-//	if (abs(theta) > LIGHT_MAX_ANGLE / 180 * MY_PI){
-//		outColor = vec3(0);
-//		return;
-//	}
-
 	// Eye vector (towards the camera)
 	vec3 V = normalize(EyeDirectionViewPass);
 	// Direction in which the triangle reflects the light
@@ -57,12 +51,10 @@ void main()
 	float cosAlpha = clamp(dot(V,R), 0, 1);
 
 	outColor = 
-		// Ambient : simulates indirect lighting
-		MaterialAmbientColor +
 		// Diffuse : "color" of the object
 		MaterialDiffuseColor * lightColor * cosTheta +
 		// Specular : reflective highlight, like a mirror
 		MaterialSpecularColor * lightColor * pow(cosAlpha,20);
 
-//	outColor = outColor * (1/(abs(theta)*20));
+	outColor = outColor + MaterialAmbientColor; // Ambient : simulates indirect lighting
 }

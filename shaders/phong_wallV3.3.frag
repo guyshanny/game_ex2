@@ -7,6 +7,7 @@ in vec3 PositionWorldPass;
 in vec3 NormalViewPass;
 in vec3 EyeDirectionViewPass;
 in vec3 LightDirectionViewPass;
+in vec3 LightPositionViewPass;
 in vec2 TexCoordPass;
 
 // Ouput data
@@ -22,13 +23,13 @@ uniform vec4 gLightColor;
 
 void main()
 {	
+	vec3 gLightDirection = (gView * gModel * vec4(0,0,1, 1)).xyz; //SHOULD BE UNIFORM
 	vec3 lightColor = gLightColor.rgb;
 	// Material properties
 	// texture2D <-> texture ??
-	vec3 MaterialDiffuseColor = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
-	//vec3 MaterialDiffuseColor = gMaterialColor.rgb;
-	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(1.0,1.0,1.0);
+	vec3 materialDiffuseColor = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
+	vec3 materialAmbientColor = vec3(0.1,0.1,0.1) * materialDiffuseColor;
+	vec3 materialSpecularColor = vec3(1.0,1.0,1.0);
 	// Normal of the computed fragment, in camera space
 	vec3 N = normalize(NormalViewPass);
 	// Direction of the light (from the fragment to the light)
@@ -40,12 +41,6 @@ void main()
 	//  - light is behind the triangle -> 0
 	float cosTheta = clamp(dot(N, L), 0, 1);
 
-//	float theta = acos(dot(vec3(0,0,1), L));
-//	if (abs(theta) > LIGHT_MAX_ANGLE / 180 * MY_PI){
-//		outColor = vec3(0);
-//		return;
-//	}
-
 	// Eye vector (towards the camera)
 	vec3 V = normalize(EyeDirectionViewPass);
 	// Direction in which the triangle reflects the light
@@ -56,13 +51,22 @@ void main()
 	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp(dot(V,R), 0, 1);
 
-	outColor = 
-		// Ambient : simulates indirect lighting
-		MaterialAmbientColor +
-		// Diffuse : "color" of the object
-		MaterialDiffuseColor * lightColor * cosTheta +
-		// Specular : reflective highlight, like a mirror
-		MaterialSpecularColor * lightColor * pow(cosAlpha,20);
+	float gLightAttenuation = 0.00001; //SHOULD BE UNIFORM
+	vec3 temp = LightPositionViewPass - PositionWorldPass;
+	float attenuation = 1.0 / (1.0 + gLightAttenuation * pow(length(temp), 2));
 
-//	outColor = outColor * (1/(abs(theta)*20));
+	float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(gLightDirection))));
+	if(lightToSurfaceAngle > 10){
+		attenuation = 0.0;
+	}
+
+	outColor = 
+		// Diffuse : "color" of the object
+		materialDiffuseColor * lightColor * cosTheta +
+		// Specular : reflective highlight, like a mirror
+		materialSpecularColor * lightColor * pow(cosAlpha,400);
+
+	outColor = outColor * attenuation;
+
+	outColor = outColor + materialAmbientColor; // Ambient : simulates indirect lighting
 }
