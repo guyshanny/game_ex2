@@ -37,9 +37,9 @@ void OpenMeshObject::init()
 			//sort out vertices_rgb
 			Mesh::Point& p = _mesh.point(*fvIter);
 			_vertices.push_back(glm::vec4(normalize(p[0], 0),
-										  normalize(p[1], 1),
-										  normalize(p[2], 2),
-										  1));
+											normalize(p[1], 1),
+											normalize(p[2], 2),
+											1));
 
 			//sort out colours
 			for (int i = 0; i < 3; i++)

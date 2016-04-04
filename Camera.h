@@ -30,9 +30,11 @@ public:
 		MOVE_DOWN,
 		MOVE_LEFT,
 		MOVE_RIGHT,
+		ZOOM_IN,
+		ZOOM_OUT,
 
 		// Number of commands
-		NUM_OF_COMMANDS = 4
+		NUM_OF_COMMANDS = 6
 	};
 
 	static Camera* instance()
@@ -51,6 +53,8 @@ public:
 	void moveDown();
 	void moveLeft();
 	void moveRight();
+	void zoomIn();
+	void zoomOut();
 
 	// Getters & setters
 	glm::mat4 getViewMatrix() { return _view; }
@@ -75,6 +79,8 @@ private:
 	void _moveDownLogic();
 	void _moveLeftLogic();
 	void _moveRightLogic();
+	void _zoomIn();
+	void _zoomOut();
 
 	Camera();
 	static Camera* _instance;

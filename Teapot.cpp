@@ -3,13 +3,9 @@
 
 Teapot::Teapot(const char* vShaderFile, const char* fShaderFile, 
 			   const std::string textureIMG, const char*  meshPath) :
-			   OpenMeshObject(vShaderFile, fShaderFile, glm::vec3(0, 0, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
+			   OpenMeshObject(vShaderFile, fShaderFile, glm::vec3(6, 6, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
 			   _colorIndicator(0)
 {
-	// Initial position
-	float angle = -1;
-	glm::mat4 xRotation = glm::rotate(_model, angle, glm::vec3(1, 0, 0));
-	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
 }
 
 void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view,
@@ -95,36 +91,50 @@ void Teapot::init()
 
 void Teapot::changeColor()
 {
+	_commands[Commands::CHANGE_COLOR] = true;
+}
+
+void Teapot::_updateCommands()
+{
+	if (_commands[Commands::CHANGE_COLOR]) { _changeColor(); }
+}
+
+void Teapot::_changeColor()
+{
+	_commands[Commands::CHANGE_COLOR] = false;
+
 	int x = _colorIndicator;
 	_colorIndicator = (_colorIndicator + 1) % 5;
 	switch (_colorIndicator)
 	{
-		case 0:
-			_color = glm::vec4(1, 1, 1, 1);
-			break;
-		case 1: 
-			_color = glm::vec4(1, 0, 0, 1);
-			break;
-		case 2: 
-			_color = glm::vec4(0, 1, 0, 1);
-			break;
-		case 3: 
-			_color = glm::vec4(0, 0, 1, 1);
-			break;
-		case 4: 
-			_color = glm::vec4(1, 1, 0, 1);
-			break;
+	case 0:
+		_color = glm::vec4(1, 1, 1, 1);
+		break;
+	case 1:
+		_color = glm::vec4(1, 0, 0, 1);
+		break;
+	case 2:
+		_color = glm::vec4(0, 1, 0, 1);
+		break;
+	case 3:
+		_color = glm::vec4(0, 0, 1, 1);
+		break;
+	case 4:
+		_color = glm::vec4(1, 1, 0, 1);
+		break;
 	}
 }
 
 void Teapot::update()
 {
+	// Update commands
+	_updateCommands();
+
 	// translate & rotate around x/y axis
-	static float angle = 0.0f;
-	angle += 0.005f;
+	_angle += 0.001f;
 
 	// 1st geometry translate & rotate in x & rotate in y
-	glm::mat4 xTranslate = glm::translate(glm::mat4(1), glm::vec3(0, -1, 0));
-	glm::mat4 xRotation = glm::rotate(xTranslate, angle, glm::vec3(1, 0, 0));
-	_model = glm::rotate(xRotation, angle, glm::vec3(0, 1, 0));
+	glm::mat4 xTranslate = glm::translate(glm::mat4(1), _position);
+	glm::mat4 xRotation = glm::rotate(xTranslate, _angle, glm::vec3(1, 0, 0));
+	_model = glm::rotate(xRotation, _angle, glm::vec3(0, 1, 0));
 }

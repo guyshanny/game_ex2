@@ -31,6 +31,8 @@ void Camera::update()
 	if (_commands[Commands::MOVE_DOWN]) { _moveDownLogic(); }
 	if (_commands[Commands::MOVE_RIGHT]) { _moveRightLogic(); }
 	if (_commands[Commands::MOVE_LEFT]) { _moveLeftLogic(); }
+	if (_commands[Commands::ZOOM_IN]) { _zoomIn(); }
+	if (_commands[Commands::ZOOM_OUT]) { _zoomOut(); }
 }
 
 glm::mat4 Camera::_calculateViewMatrix()
@@ -45,6 +47,8 @@ void Camera::moveUp() { _commands[Commands::MOVE_UP] = true; }
 void Camera::moveDown() { _commands[Commands::MOVE_DOWN] = true; }
 void Camera::moveLeft() { _commands[Commands::MOVE_LEFT] = true; }
 void Camera::moveRight() { _commands[Commands::MOVE_RIGHT] = true; }
+void Camera::zoomIn() { _commands[Commands::ZOOM_IN] = true; }
+void Camera::zoomOut() { _commands[Commands::ZOOM_OUT] = true; }
 
 void Camera::_moveUpLogic()
 {
@@ -97,6 +101,33 @@ void Camera::_moveRightLogic()
 	_position += glm::vec3(1, 0, 0) * _speed;
 	_calculateViewMatrix();
 }
+
+void Camera::_zoomIn()
+{
+	_commands[Commands::ZOOM_IN] = false;
+
+	glm::vec3 tmpPos = _position + glm::vec3(0.f, 0.f, -4.f)*_speed;
+	if (tmpPos.z <= 5)
+	{
+		return;
+	}
+	_position = tmpPos;
+	_calculateViewMatrix();
+}
+
+void Camera::_zoomOut()
+{
+	_commands[Commands::ZOOM_OUT] = false;
+
+	glm::vec3 tmpPos = _position + glm::vec3(0.f, 0.f, 4.f)*_speed;
+	if (tmpPos.z > (_initialPosition + glm::vec3(0.f, 0.f, 30.f)).z)
+	{
+		return;
+	}
+	_position = tmpPos;
+	_calculateViewMatrix();
+}
+
 #pragma endregion
 
 

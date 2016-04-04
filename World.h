@@ -51,4 +51,10 @@ public:
 	void turnLeftKeyPressed();
 	void changeColorKeyPressed();
 	void moveLight(int key);
+
+	// Mouse handling
+	void mouseLeftDown(const int& x, const int& y);
+	void mouseLeftUp(const int& x, const int& y);
+	void mouseWheelForward(const int& x, const int& y);
+	void mouseWheelBackWard();
 };

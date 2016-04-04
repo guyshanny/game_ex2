@@ -92,6 +92,46 @@ void keyboard( unsigned char key, int x, int y )
 	glutPostRedisplay();
 }
 
+void mouse(int button, int state, int x, int y)
+{
+	switch (button)
+	{
+		case GLUT_LEFT_BUTTON:
+			if (state == GLUT_DOWN) 
+			{
+				_world->mouseLeftDown(x, y);
+			}
+			else {
+				_world->mouseLeftUp(x, y);
+			}
+			break;
+// 		case GLUT_RIGHT_BUTTON:
+// 			if (state == GLUT_DOWN) 
+// 			{
+// 				_model.begin_translation(x, y);
+// 			}
+// 			else {
+// 				_model.end_translation();
+// 			}
+// 			break;
+		default:
+			break;
+	}
+}
+
+void mouseWheel(int wheel, int direction, int x, int y)
+{
+	// ZoomIn
+	if (direction > 0)
+	{
+		_world->mouseWheelForward(x, y);
+	}
+	else // ZoomOut
+	{
+		_world->mouseWheelBackWard();
+	}
+}
+
 void specialkey(int key, int x, int y )
 {
 	_world->moveLight(key);
@@ -123,8 +163,11 @@ int main( int argc, char **argv )
 
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
-    glutSpecialFunc( specialkey );
+	glutMouseFunc(mouse);
+	glutMouseWheelFunc(mouseWheel);
+	glutSpecialFunc( specialkey );
 	glutIdleFunc( update );
+	
 
     glutMainLoop();
 

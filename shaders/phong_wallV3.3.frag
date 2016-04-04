@@ -24,50 +24,65 @@ uniform vec4 gLightColor;
 
 void main()
 {	
+	vec3 diffusiveColor;
+	vec3 specularColor;
+	float attenuation;
+
 	vec3 lightDirection = (gView * gModel * gLightDirection).xyz;
 	vec3 lightColor = gLightColor.rgb;
+
 	// Material properties
-	// texture2D <-> texture ??
-	vec3 materialDiffuseColor = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
-	vec3 materialAmbientColor = vec3(0.1,0.1,0.1) * materialDiffuseColor;
-	vec3 materialSpecularColor = vec3(1.0,1.0,1.0);
+	vec3 materialDiffuseCoefficient = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
+	vec3 materialSpecularCoefficient = vec3(1.0,1.0,1.0);
+
+	// Ambient color
+	vec3 ambientColor = vec3(0.1,0.1,0.1) * materialDiffuseCoefficient;
+
+	// Vectors calculations
 	// Normal of the computed fragment, in camera space
 	vec3 N = normalize(NormalViewPass);
 	// Direction of the light (from the fragment to the light)
 	vec3 L = normalize(gLightDirection.xyz);
-	// Cosine of the angle between the normal and the light direction, 
-	// clamped above 0
-	//  - light is at the vertical of the triangle -> 1
-	//  - light is perpendicular to the triangle -> 0
-	//  - light is behind the triangle -> 0
-	float cosTheta = clamp(dot(N, L), 0, 1);
-
-	// Eye vector (towards the camera)
-	vec3 V = normalize(EyeDirectionViewPass);
-	// Direction in which the triangle reflects the light
-	vec3 R = reflect(-L, N);
-	// Cosine of the angle between the Eye vector and the Reflect vector,
-	// clamped to 0
-	//  - Looking into the reflection -> 1
-	//  - Looking elsewhere -> < 1
-	float cosAlpha = clamp(dot(V,R), 0, 1);
-
-	float gLightAttenuation = 0.0001; //SHOULD BE UNIFORM
-	vec3 temp = LightPositionViewPass - PositionWorldPass;
-	float attenuation = 1.0 / (1.0 + gLightAttenuation * pow(length(temp), 2));
-
-	float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(lightDirection))));
-	if(lightToSurfaceAngle > 10){
-		attenuation = 0.0;
+	
+	// Calculate diffusive color
+	{
+		// Cosine of the angle between the normal and the light direction, 
+		// clamped above 0
+		//  - light is at the vertical of the triangle -> 1
+		//  - light is perpendicular to the triangle -> 0
+		//  - light is behind the triangle -> 0
+		float cosTheta = clamp(dot(N, L), 0, 1);
+		
+		diffusiveColor = materialDiffuseCoefficient * lightColor * cosTheta;
 	}
 
-	outColor = 
-		// Diffuse : "color" of the object
-		materialDiffuseColor * lightColor * cosTheta +
-		// Specular : reflective highlight, like a mirror
-		materialSpecularColor * lightColor * pow(cosAlpha,400);
+	// Calculate specular color
+	{
+		// Eye vector (towards the camera)
+		vec3 V = normalize(EyeDirectionViewPass);
+		// Direction in which the triangle reflects the light
+		vec3 R = reflect(-L, N);
+		// Cosine of the angle between the Eye vector and the Reflect vector,
+		// clamped to 0
+		//  - Looking into the reflection -> 1
+		//  - Looking elsewhere -> < 1
+		float cosAlpha = clamp(dot(V,R), 0, 1);
+		
+		specularColor = materialSpecularCoefficient * lightColor * pow(cosAlpha,400);
+	}
 
-	outColor = outColor * attenuation;
+	// Calculate attenuation
+	{
+		float gLightAttenuation = 0.0001; //SHOULD BE UNIFORM
+		vec3 temp = LightPositionViewPass - PositionWorldPass;
+		attenuation = 1.0 / (1.0 + gLightAttenuation * pow(length(temp), 2));
 
-	outColor = outColor + materialAmbientColor; // Ambient : simulates indirect lighting
+		float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(lightDirection))));
+		if(lightToSurfaceAngle > 10)
+		{
+			attenuation = 0.0;
+		}		
+	}
+
+	outColor = (diffusiveColor + specularColor) * attenuation + ambientColor;
 }

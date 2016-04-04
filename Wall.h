@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-class Wall : Object
+class Wall : public Object
 {
 public:
 	Wall(const char* vShaderFile,

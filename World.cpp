@@ -65,8 +65,8 @@ void World::init()
 
 void World::_createSceneObjects()
 {
-	_objects.push_back((Object*)(new Teapot("shaders\\phong_teapotV3.3.vert", "shaders\\phong_teapotV3.3.frag", "C:\\Users\\guy\\Dropbox\\Computer games programming\\ex2\\final\\final\\textures\\teapot.jpg", "meshes\\teapot.obj")));
-	_objects.push_back((Object*)(new Wall("shaders\\phong_wallV3.3.vert", "shaders\\phong_wallV3.3.frag", WRAPPING_CUBE_SIZE, WRAPPING_CUBE_SIZE, "textures\\wall.bmp")));
+	_objects.push_back((new Teapot("shaders\\phong_teapotV3.3.vert", "shaders\\phong_teapotV3.3.frag", "C:\\Users\\guy\\Dropbox\\Computer games programming\\ex2\\final\\final\\textures\\teapot.jpg", "meshes\\teapot.obj")));
+	_objects.push_back((new Wall("shaders\\phong_wallV3.3.vert", "shaders\\phong_wallV3.3.frag", WRAPPING_CUBE_SIZE, WRAPPING_CUBE_SIZE, "textures\\wall.bmp")));
 
 }
 #pragma endregion
@@ -105,16 +105,52 @@ void World::turnRightKeyPressed() { _camera->moveRight(); }
 void World::turnLeftKeyPressed() { _camera->moveLeft(); }
 void World::changeColorKeyPressed() 
 {
-	//Teapot* teapot = dynamic_cast<Teapot*>(_objects.front()); // NOT WORKING!!
-	Teapot* teapot = (Teapot*)(_objects.front());
-	teapot->changeColor();
+	Teapot* teapot = NULL;
+	for (Object* obj : _objects)
+	{
+		teapot = dynamic_cast<Teapot*>(_objects.front());
+		if (NULL != teapot)
+		{
+			break;
+		}
+	}
+
+	if (NULL != teapot)
+	{
+		teapot->changeColor();
+	}
 }
+
 void World::moveLight(int key)
 {
 	_light->move(key);
 }
 
 #pragma endregion
+
+#pragma region MouseHandling
+
+void World::mouseLeftDown(const int & x, const int & y)
+{
+}
+
+void World::mouseLeftUp(const int & x, const int & y)
+{
+}
+
+void World::mouseWheelForward(const int & x, const int & y)
+{
+	_camera->zoomIn();
+}
+
+void World::mouseWheelBackWard()
+{
+	_camera->zoomOut();
+}
+
+#pragma endregion
+
+
 
 void World::resize(int width, int height)
 {
