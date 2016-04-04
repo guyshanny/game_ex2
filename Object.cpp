@@ -30,7 +30,7 @@ GLuint Object::initTexture(const char* fName)
 {
 	cv::Mat img = cv::imread(fName);
 	//cv::imshow("CV debug", img);
-
+	
 	GLuint texture;
 
 	glGenTextures(1, &texture);
