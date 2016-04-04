@@ -8,7 +8,8 @@ Wall::Wall(const char* vShaderFile,
 		   //150, 22, 11
 		   Object(vShaderFile, fShaderFile, glm::vec3(0, 0, -50), glm::vec4(0.8, 0.25, 0.1, 1), textureIMG),
 	_width(width),
-	_height(height)
+	_height(height),
+	_flickerLightIndicator(0.f)
 {
 }
 
@@ -90,6 +91,33 @@ void Wall::init()
 	}
 }
 
+void Wall::flickerLight(const bool & mode)
+{
+	if (mode)
+	{
+		_commands[Commands::FLICKER_LIGHT] = true;
+	}
+	else
+	{
+		_commands[Commands::UNDO_FLICKER_LIGHT] = true;
+	}
+}
+
+void Wall::_flickerLight(const bool & mode)
+{
+	_commands[Commands::FLICKER_LIGHT] = false;
+	_commands[Commands::UNDO_FLICKER_LIGHT] = false;
+
+	if (mode)
+	{
+		_flickerLightIndicator = 1.f;
+	}
+	else
+	{
+		_flickerLightIndicator = 0.f;
+	}
+}
+
 void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view,
 				const glm::vec3 camPos, Light* light)
 {
@@ -102,6 +130,9 @@ void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view,
  		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
  		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
 
+		GLuint flickerLightID = glGetUniformLocation(_programID, "lightFlicker");
+		glUniform1f(flickerLightID, _flickerLightIndicator);
+
  		glUniform1i(glGetUniformLocation(_programID, TEXTURE_SAMPLER), 0);
  		glActiveTexture(GL_TEXTURE0);
  		glBindTexture(GL_TEXTURE_2D, _textureID);
@@ -113,4 +144,11 @@ void Wall::draw(const glm::mat4 & projection, const glm::mat4 & view,
 		glBindVertexArray(0);
 	}
 	END_OPENGL;
+}
+
+void Wall::update()
+{
+	// Update commands
+	if (_commands[Commands::FLICKER_LIGHT]) { _flickerLight(true); }
+	if (_commands[Commands::UNDO_FLICKER_LIGHT]) { _flickerLight(false); }
 }

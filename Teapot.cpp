@@ -4,7 +4,7 @@
 Teapot::Teapot(const char* vShaderFile, const char* fShaderFile, 
 			   const std::string textureIMG, const char*  meshPath) :
 			   OpenMeshObject(vShaderFile, fShaderFile, glm::vec3(6, 6, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
-			   _colorIndicator(0)
+			   _colorIndicator(0), _flickerLightIndicator(0.f)
 {
 }
 
@@ -24,6 +24,9 @@ void Teapot::draw(const glm::mat4 & projection, const glm::mat4 & view,
 		GLuint materialID = glGetUniformLocation(_programID, MATERIAL_COLOR);
 		glUniform4f(materialID, _color.r, _color.g, _color.b, _color.a);
 		
+		GLuint flickerLightID = glGetUniformLocation(_programID, "lightFlicker");
+		glUniform1f(flickerLightID, _flickerLightIndicator);
+
 		GLuint textureSamplerID = glGetUniformLocation(_programID, TEXTURE_SAMPLER);
 		glUniform1i(textureSamplerID, 0);
 		glActiveTexture(GL_TEXTURE0);
@@ -89,14 +92,31 @@ void Teapot::init()
 	}
 }
 
+#pragma region Game events
 void Teapot::changeColor()
 {
 	_commands[Commands::CHANGE_COLOR] = true;
 }
 
+void Teapot::flickerLight(const bool & mode)
+{
+	if (mode)
+	{
+		_commands[Commands::FLICKER_LIGHT] = true;
+	}
+	else
+	{
+		_commands[Commands::UNDO_FLICKER_LIGHT] = true;
+	}
+}
+#pragma endregion
+
+
 void Teapot::_updateCommands()
 {
 	if (_commands[Commands::CHANGE_COLOR]) { _changeColor(); }
+	if (_commands[Commands::FLICKER_LIGHT]) { _flickerLight(true); }
+	if (_commands[Commands::UNDO_FLICKER_LIGHT]) { _flickerLight(false); }
 }
 
 void Teapot::_changeColor()
@@ -122,6 +142,21 @@ void Teapot::_changeColor()
 	case 4:
 		_color = glm::vec4(1, 1, 0, 1);
 		break;
+	}
+}
+
+void Teapot::_flickerLight(const bool & mode)
+{
+	_commands[Commands::FLICKER_LIGHT] = false;
+	_commands[Commands::UNDO_FLICKER_LIGHT] = false;
+	
+	if (mode)
+	{
+		_flickerLightIndicator = 1.f;
+	}
+	else
+	{
+		_flickerLightIndicator = 0.f;
 	}
 }
 

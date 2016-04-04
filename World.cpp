@@ -108,7 +108,7 @@ void World::changeColorKeyPressed()
 	Teapot* teapot = NULL;
 	for (Object* obj : _objects)
 	{
-		teapot = dynamic_cast<Teapot*>(_objects.front());
+		teapot = dynamic_cast<Teapot*>(obj);
 		if (NULL != teapot)
 		{
 			break;
@@ -148,8 +148,32 @@ void World::mouseWheelBackWard()
 	_camera->zoomOut();
 }
 
+
 #pragma endregion
 
+
+#pragma region Game events
+
+void World::flickerLight(const bool & mode)
+{
+	Teapot* teapot = NULL;
+	Wall* wall = NULL;
+	for (Object* obj : _objects)
+	{
+		if (NULL == teapot)
+		{
+			teapot = dynamic_cast<Teapot*>(obj);
+		}
+		if (NULL == wall)
+		{
+			wall = dynamic_cast<Wall*>(obj);
+		}
+	}
+	teapot->flickerLight(mode);
+	wall->flickerLight(mode);
+}
+
+#pragma endregion
 
 
 void World::resize(int width, int height)

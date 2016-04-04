@@ -57,4 +57,7 @@ public:
 	void mouseLeftUp(const int& x, const int& y);
 	void mouseWheelForward(const int& x, const int& y);
 	void mouseWheelBackWard();
+
+	// Events
+	void flickerLight(const bool& mode);
 };

@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "World.h"
+#include "GameEvents.h"
 
 #define SHADERS_VERTEX "shaders\\phongV3.3.vert"
 #define SHADERS_FRAGMENT "shaders\\phongV3.3.frag"
@@ -17,6 +18,7 @@
 //												Globals											  //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 World* _world;
+GameEvents* _gameEvents;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //												Controls										  //
@@ -51,6 +53,9 @@ void init( void )
 	// Creating the world
 	_world = new World();
 	_world->init();
+
+	_gameEvents = GameEvents::instance();
+	_gameEvents->init(_world);
 }
 
 void display( void )
@@ -145,6 +150,8 @@ void update()
 	currentTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = currentTime - prevTime;
 	prevTime = currentTime;
+
+	_gameEvents->update();
 	_world->update();
 
 	glutPostRedisplay();

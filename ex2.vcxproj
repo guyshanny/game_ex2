@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GameEvents.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="GameEvents.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MinimalObject.h" />

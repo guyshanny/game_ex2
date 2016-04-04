@@ -16,14 +16,22 @@ out vec3 outColor;
 // Values that stay constant for the whole mesh.
 uniform sampler2D gTextureSampler;
 uniform vec4 gMaterialColor;
+uniform mat4 gProjection;
 uniform mat4 gView;
 uniform mat4 gModel;
 uniform vec4 gLightPosition; // light (in world)
 uniform vec4 gLightDirection;
 uniform vec4 gLightColor;
+uniform float lightFlicker;
 
 void main()
 {	
+	if (1.0 == lightFlicker)
+	{
+		outColor = vec3(0, 0, 0);
+		return;
+	}
+
 	vec3 diffusiveColor;
 	vec3 specularColor;
 	float attenuation;
@@ -73,16 +81,19 @@ void main()
 
 	// Calculate attenuation
 	{
-		float gLightAttenuation = 0.0001; //SHOULD BE UNIFORM
+		float gLightAttenuation = 0.0005; //SHOULD BE UNIFORM
 		vec3 temp = LightPositionViewPass - PositionWorldPass;
 		attenuation = 1.0 / (1.0 + gLightAttenuation * pow(length(temp), 2));
 
 		float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(lightDirection))));
-		if(lightToSurfaceAngle > 10)
-		{
-			attenuation = 0.0;
-		}		
+		float circleFactor = 1 - lightToSurfaceAngle / 15.0;
+		attenuation *= circleFactor;
+//		if(lightToSurfaceAngle > 10)
+//		{
+//			attenuation = 0.0;
+//		}		
 	}
 
-	outColor = (diffusiveColor + specularColor) * attenuation + ambientColor;
+	 outColor = (diffusiveColor + specularColor) * attenuation;
+	//outColor = (diffusiveColor + specularColor) * attenuation;
 }
