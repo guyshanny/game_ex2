@@ -137,9 +137,15 @@ void mouseWheel(int wheel, int direction, int x, int y)
 	}
 }
 
+void mouseMove(int x, int y)
+{
+	_world->moveLightUsingMouse(x, y);
+	glutPostRedisplay();
+}
+
 void specialkey(int key, int x, int y )
 {
-	_world->moveLight(key);
+	_world->moveLightUsingArrows(key);
 	glutPostRedisplay();
 }
 
@@ -161,7 +167,7 @@ int main( int argc, char **argv )
 {
 	glutInit(&argc, argv);
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(512, 512);
+    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutCreateWindow(argv[0]);
     
 	glewExperimental = GL_TRUE;
@@ -172,6 +178,7 @@ int main( int argc, char **argv )
     glutKeyboardFunc( keyboard );
 	glutMouseFunc(mouse);
 	glutMouseWheelFunc(mouseWheel);
+	glutPassiveMotionFunc(mouseMove);
 	glutSpecialFunc( specialkey );
 	glutIdleFunc( update );
 	

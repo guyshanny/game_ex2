@@ -50,13 +50,14 @@ public:
 	void turnRightKeyPressed();
 	void turnLeftKeyPressed();
 	void changeColorKeyPressed();
-	void moveLight(int key);
+	void moveLightUsingArrows(int key);
 
 	// Mouse handling
 	void mouseLeftDown(const int& x, const int& y);
 	void mouseLeftUp(const int& x, const int& y);
 	void mouseWheelForward(const int& x, const int& y);
 	void mouseWheelBackWard();
+	void moveLightUsingMouse(const int& x, const int& y);
 
 	// Events
 	void flickerLight(const bool& mode);

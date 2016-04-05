@@ -121,9 +121,9 @@ void World::changeColorKeyPressed()
 	}
 }
 
-void World::moveLight(int key)
+void World::moveLightUsingArrows(int key)
 {
-	_light->move(key);
+	_light->moveUsingArrows(key);
 }
 
 #pragma endregion
@@ -147,6 +147,12 @@ void World::mouseWheelBackWard()
 {
 	_camera->zoomOut();
 }
+
+void World::moveLightUsingMouse(const int & x, const int & y)
+{
+	_light->moveUsingMouse(x, y);
+}
+
 
 
 #pragma endregion

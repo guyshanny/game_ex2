@@ -85,13 +85,9 @@ void main()
 		vec3 temp = LightPositionViewPass - PositionWorldPass;
 		attenuation = 1.0 / (1.0 + gLightAttenuation * pow(length(temp), 2));
 
-		float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(lightDirection))));
-		float circleFactor = 1 - lightToSurfaceAngle / 15.0;
-		attenuation *= circleFactor;
-//		if(lightToSurfaceAngle > 10)
-//		{
-//			attenuation = 0.0;
-//		}		
+		//float lightToSurfaceAngle = degrees(acos(dot(-normalize(temp), normalize(lightDirection))));
+		//float circleFactor = 1 - lightToSurfaceAngle / 15.0;
+		//attenuation *= circleFactor;
 	}
 
 	 outColor = (diffusiveColor + specularColor) * attenuation;

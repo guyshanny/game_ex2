@@ -42,7 +42,7 @@ GLuint Object::initTexture(const char* fName)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.cols, img.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, img.ptr());
-	}
+	} 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return texture;
 }

@@ -12,7 +12,8 @@ public:
 	void update() {};
 	void draw(const glm::mat4& projection, const glm::mat4& view) {};
 	void init() {};
-	void move(int dir);
+	void moveUsingArrows(int key);
+	void moveUsingMouse(const int& x, const int& y);
 	glm::vec3 getDirection() { return _direction; }
 
 private:
@@ -21,4 +22,6 @@ private:
 	glm::vec3 _coneDirection;
 	float _attenuation;
 	float _movingSpeed;
+
+	glm::vec2 _toWorld(const int& x, const int& y);
 };
