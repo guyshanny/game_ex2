@@ -1,0 +1,27 @@
+me: guyshanny 203788716
+my partner: rotemge 305189623
+
+Controls were implemented:
+--------------------------
+Mouse control of flashlight (in addition to arrow keys) 
+WASD to control camera									
+page up/down to move light closer/ferther away
+SPACE to change teapot color
+Mouse wheel for zooming
+
+Other optionals we've implemented:
+----------------------------------
+Time-based light intensity - with ramdomness			
+Soft edge light
+
+Running
+-------
+Pay attention - there are some static configuration in our solution (ex2.vcxproj) such as:
+	- OpenCV directories & libs
+	- OpenMesh directories & libs
+So, change it to your configuration before compiling.
+
+We've attached a python script - run.py and an executable we've compiled statically. 
+cmd -> python run.py
+
+Have a nice day :)
