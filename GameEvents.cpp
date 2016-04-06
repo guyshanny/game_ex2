@@ -1,8 +1,8 @@
 #include "GameEvents.h"
 
 GameEvents* GameEvents::_instance = NULL;
-const size_t GameEvents::FLICHER_TIME = 100;
-const size_t GameEvents::UNDO_FLICKER_TIME = 10;
+const size_t GameEvents::FLICHER_TIME = 1000;
+const size_t GameEvents::UNDO_FLICKER_TIME = 100;
 
 void GameEvents::update()
 {

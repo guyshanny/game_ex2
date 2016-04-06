@@ -124,6 +124,6 @@ OpenMeshObject::~OpenMeshObject()
 void OpenMeshObject::calculate_vertex_normal(const Mesh::VertexHandle &vHandle, const Mesh::FaceHandle &fHandle)
 {
 	OpenMesh::VectorT<float, 3> meshNorm;
-	meshNorm = _mesh.calc_vertex_normal(vHandle);
+	meshNorm = -_mesh.calc_vertex_normal(vHandle);
 	_vertices.push_back(glm::vec4(meshNorm[0], meshNorm[1], meshNorm[2], 0));
 }

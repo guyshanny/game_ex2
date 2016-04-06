@@ -10,8 +10,6 @@
 #include "World.h"
 #include "GameEvents.h"
 
-#define SHADERS_VERTEX "shaders\\phongV3.3.vert"
-#define SHADERS_FRAGMENT "shaders\\phongV3.3.frag"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,11 +161,16 @@ void update()
 	glutPostRedisplay();
 }
 
+void resizeWindowHandler(int width, int height)
+{
+	_world->resize(width, height);
+}
+
 int main( int argc, char **argv )
 {
 	glutInit(&argc, argv);
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    glutInitWindowSize(Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT);
     glutCreateWindow(argv[0]);
     
 	glewExperimental = GL_TRUE;
@@ -181,6 +184,7 @@ int main( int argc, char **argv )
 	glutPassiveMotionFunc(mouseMove);
 	glutSpecialFunc( specialkey );
 	glutIdleFunc( update );
+	glutReshapeFunc(resizeWindowHandler);
 	
 
     glutMainLoop();

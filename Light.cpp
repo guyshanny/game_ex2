@@ -43,11 +43,11 @@ glm::vec2 Light::_toWorld(const int& x, const int& y)
 	const float maxBoundary = 0.5f;
 	const float minBoundary = 0.5f;
 
-	float xnorm = ((float)x <= WINDOW_WIDTH / 2.f) ? -(WINDOW_WIDTH / 2.f - (float)x) : (float)x - WINDOW_WIDTH / 2.f;
-	float ynorm = ((float)y <= WINDOW_HEIGHT / 2.f) ? WINDOW_HEIGHT / 2.f - (float)y : -((float)y - WINDOW_HEIGHT / 2.f);
+	float xnorm = ((float)x <= Globals::WINDOW_WIDTH / 2.f) ? -(Globals::WINDOW_WIDTH / 2.f - (float)x) : (float)x - Globals::WINDOW_WIDTH / 2.f;
+	float ynorm = ((float)y <= Globals::WINDOW_HEIGHT / 2.f) ? Globals::WINDOW_HEIGHT / 2.f - (float)y : -((float)y - Globals::WINDOW_HEIGHT / 2.f);
 
-	xnorm = (xnorm / (WINDOW_WIDTH / 2.f)) / 2.f;
-	ynorm = (ynorm / (WINDOW_HEIGHT / 2.f)) / 2.f;
+	xnorm = (xnorm / (Globals::WINDOW_WIDTH / 2.f)) / 2.f;
+	ynorm = (ynorm / (Globals::WINDOW_HEIGHT / 2.f)) / 2.f;
 
 	return glm::vec2(xnorm, ynorm);
 }

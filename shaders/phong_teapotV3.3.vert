@@ -9,6 +9,7 @@ out vec3 PositionWorldPass;
 out vec3 NormalViewPass;
 out vec3 EyeDirectionViewPass;
 out vec3 LightDirectionViewPass;
+out vec3 LightPositionViewPass;
 out vec2 TexCoordPass;
 
 // Values that stay constant for the whole mesh.
@@ -32,8 +33,8 @@ void main()
 	EyeDirectionViewPass = gEyePosition - PositionView;
 	
 	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
-	vec3 LightPositionView = (gView * gLightPosition).xyz;
-	LightDirectionViewPass = LightPositionView + EyeDirectionViewPass;
+	LightPositionViewPass = (gView * gModel * gLightPosition).xyz;
+	LightDirectionViewPass = LightPositionViewPass + EyeDirectionViewPass;
 	
 	// Normal of the the vertex, in camera space
 	NormalViewPass = (gView * gModel * norm).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.

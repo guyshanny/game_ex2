@@ -3,7 +3,7 @@
 
 Teapot::Teapot(const char* vShaderFile, const char* fShaderFile, 
 			   const std::string textureIMG, const char*  meshPath) :
-			   OpenMeshObject(vShaderFile, fShaderFile, glm::vec3(6, 6, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
+			   OpenMeshObject(vShaderFile, fShaderFile, glm::vec3(0, 0, 0), glm::vec4(1, 1, 1, 1), meshPath, textureIMG),
 			   _colorIndicator(0), _flickerLightIndicator(0.f)
 {
 }

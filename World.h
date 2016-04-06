@@ -22,11 +22,8 @@
 #include <GL/gl.h>
 #endif
 
-class World {
-
-	// View port frame:
-	float _width, _height, _offsetX, _offsetY;
-
+class World 
+{
 	// MVP matrices
 	glm::mat4 _projection;
 

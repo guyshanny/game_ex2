@@ -65,8 +65,8 @@ void World::init()
 
 void World::_createSceneObjects()
 {
-	_objects.push_back((new Teapot("shaders\\phong_teapotV3.3.vert", "shaders\\phong_teapotV3.3.frag", "C:\\Users\\guy\\Dropbox\\Computer games programming\\ex2\\final\\final\\textures\\teapot.jpg", "meshes\\teapot.obj")));
-	_objects.push_back((new Wall("shaders\\phong_wallV3.3.vert", "shaders\\phong_wallV3.3.frag", WRAPPING_CUBE_SIZE, WRAPPING_CUBE_SIZE, "textures\\wall.bmp")));
+	_objects.push_back((new Teapot("shaders\\phong_teapotV3.3.vert", "shaders\\phongV3.3.frag", "textures\\teapot.jpg", "meshes\\teapot.obj")));
+	_objects.push_back((new Wall("shaders\\phong_wallV3.3.vert", "shaders\\phongV3.3.frag", WRAPPING_CUBE_SIZE, WRAPPING_CUBE_SIZE, "textures\\wall.bmp")));
 
 }
 #pragma endregion
@@ -181,12 +181,9 @@ void World::flickerLight(const bool & mode)
 
 #pragma endregion
 
-
 void World::resize(int width, int height)
 {
-	_width = (float)width;
-	_height = (float)height;
-	_offsetX = 0;
-	_offsetY = 0;
+	Globals::WINDOW_WIDTH = width;
+	Globals::WINDOW_HEIGHT = height;
 }
 

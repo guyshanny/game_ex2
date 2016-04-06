@@ -41,5 +41,4 @@ void main()
 	NormalViewPass = (gView * gModel * norm).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
 
 	TexCoordPass = texCoord.xy;
-   
 }
