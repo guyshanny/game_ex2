@@ -12,6 +12,7 @@ public:
 	void update() {};
 	void draw(const glm::mat4& projection, const glm::mat4& view) {};
 	void init() {};
+	void reset();
 	void moveUsingArrows(int key);
 	void moveUsingMouse(const int& x, const int& y);
 	glm::vec3 getDirection() { return _direction; }
@@ -19,9 +20,14 @@ public:
 private:
 	glm::vec3 _direction;
 	float _coneOfLight; //degrees
-	glm::vec3 _coneDirection;
 	float _attenuation;
 	float _movingSpeed;
+
+	glm::vec3 _initialDirection;
+	float _initialConeOfLight;
+	glm::vec3 _initialConeDirection;
+	float _initialAttenuation;
+	float _initialMovingSpeed;
 
 	glm::vec2 _toWorld(const int& x, const int& y);
 };

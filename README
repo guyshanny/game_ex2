@@ -8,11 +8,30 @@ WASD to control camera
 page up/down to move light closer/ferther away
 SPACE to change teapot color
 Mouse wheel for zooming
+Reset (using R) - world, light, post processing effect, mouse cursor
 
 Other optionals we've implemented:
 ----------------------------------
 Time-based light intensity - with ramdomness			
 Soft edge light
+
+Post processing effects
+-----------------------
+0 - No effect
+1 - Gaussian blur
+2 - Edge detection
+3 - Sharping (using Laplacian)
+4 - Salt&Pepper noise reduction (median kernel)
+5 - A static wave on the screen
+6 - Time-based swirl
+7 - Time-based glow (screen brightens and then fades)
+8 - Shock wave
+
+Post processing optionals we've implemented
+-------------------------------------------
+Additional post processing - edge, sharp, swirl etc...
+Image space pp  - salt&pepper, static wave
+Time based pp  - glow, swirl
 
 Running
 -------

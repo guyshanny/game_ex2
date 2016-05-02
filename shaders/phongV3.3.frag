@@ -2,6 +2,8 @@
 #define MY_PI 3.1415926
 #define LIGHT_MAX_ANGLE (10.0f)
 
+// Very helpful link - http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
+
 // Interpolated values from the vertex shaders
 in vec3 PositionWorldPass;
 in vec3 NormalViewPass;
@@ -92,6 +94,6 @@ void main()
 		attenuation *= circleFactor;
 	}
 
-	attenuation = 1.f;
+	//attenuation = 1.f;
 	 outColor = (diffusiveColor + specularColor) * attenuation + ambientColor;
 }

@@ -97,6 +97,7 @@ void World::draw()
 
 #pragma endregion
 
+
 #pragma region KeysHandling
 
 void World::forwardKeyPressed() { _camera->moveUp(); }
@@ -105,15 +106,7 @@ void World::turnRightKeyPressed() { _camera->moveRight(); }
 void World::turnLeftKeyPressed() { _camera->moveLeft(); }
 void World::changeColorKeyPressed() 
 {
-	Teapot* teapot = NULL;
-	for (Object* obj : _objects)
-	{
-		teapot = dynamic_cast<Teapot*>(obj);
-		if (NULL != teapot)
-		{
-			break;
-		}
-	}
+	Teapot* teapot = _getObject<Teapot>();
 
 	if (NULL != teapot)
 	{
@@ -128,7 +121,9 @@ void World::moveLightUsingArrows(int key)
 
 void World::resetKeyPressed()
 {
-
+	_camera->reset();
+	_light->reset();
+	glutWarpPointer(Globals::WINDOW_WIDTH / 2, Globals::WINDOW_HEIGHT / 2);
 }
 
 #pragma endregion
@@ -184,11 +179,26 @@ void World::flickerLight(const bool & mode)
 	wall->flickerLight(mode);
 }
 
+glm::vec3 World::getDestPos()
+{
+	Teapot* teapot = _getObject<Teapot>();
+	if (NULL != teapot)
+	{
+		return teapot->getPosition();
+	}
+	return glm::vec3(0.f);
+}
+
 #pragma endregion
 
 void World::resize(int width, int height)
 {
 	Globals::WINDOW_WIDTH = width;
 	Globals::WINDOW_HEIGHT = height;
+}
+
+void World::loadShaders()
+{
+	
 }
 

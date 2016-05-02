@@ -46,6 +46,11 @@ namespace Controls
 		KEY_EDGE_DETACTION = ('2'),
 		KEY_SHARPING = ('3'),
 		KEY_MEAN = ('4'),
+		KEY_WAVE = ('5'),
+		KEY_SWIRL = ('6'),
+		KEY_GLOW = ('7'),
+		KEY_SHOCKWAVE = ('8'),
+
 	};
 }
 
@@ -104,6 +109,20 @@ void keyboard( unsigned char key, int x, int y )
 		case Controls::KEY_COLOR_CHANGE:
 			_world->changeColorKeyPressed();
 			break;
+		case Controls::KEY_RESET:
+		{
+			_world->resetKeyPressed();
+			_ppbuffer->reset();
+		}
+			
+			break;
+			// TODO::ADD NEXT IN THE NEXT EX
+// 		case Controls::KEY_RELOAD:
+// 		{
+// 			_world->loadShaders();
+// 			_ppbuffer->loadShaders();
+// 		}
+// 		break;
 
 		// PP controls
 		/* Kernels - https://en.wikipedia.org/wiki/Kernel_(image_processing)
@@ -111,41 +130,48 @@ void keyboard( unsigned char key, int x, int y )
 					 Our code in image processing course
 		*/
 		case Controls::KEY_NO_EFFECT:	// Identity matrix
-			_ppbuffer->setConvolutionMatrix(mat3(0.f, 0.f, 0.f,
-												 0.f, 1.f, 0.f,
-												 0.f, 0.f, 0.f));
+			_ppbuffer->setConvolutionMatrix(glm::mat3(0.f, 0.f, 0.f,
+													  0.f, 1.f, 0.f,
+													  0.f, 0.f, 0.f));
 			break;
 		case Controls::KEY_BLUR:		// Gaussian blur
-			_ppbuffer->setConvolutionMatrix(mat3(1.f, 2.f, 1.f, 
-												 2.f, 4.f, 2.f, 
-												 1.f, 2.f, 1.f) / 16.f);
+			_ppbuffer->setConvolutionMatrix(glm::mat3(1.f, 2.f, 1.f,
+													  2.f, 4.f, 2.f, 
+													  1.f, 2.f, 1.f) / 16.f);
 			break;
 		case Controls::KEY_EDGE_DETACTION:
-			_ppbuffer->setConvolutionMatrix(mat3(0.f, 1.f, 0.f,
-												 1.f, -4.f, 1.f, 
-												 0.f, 1.f, 0.f));
+			_ppbuffer->setConvolutionMatrix(glm::mat3(0.f, 1.f, 0.f,
+													  1.f, -4.f, 1.f, 
+													  0.f, 1.f, 0.f));
 			break;
 		case Controls::KEY_SHARPING:
-			_ppbuffer->setConvolutionMatrix(mat3(-1.f, -1.f, -1.f, 
-												 -1.f, 8.f, -1.f, 
-												 -1.f, -1.f, -1.f));
+			_ppbuffer->setConvolutionMatrix(glm::mat3(-1.f, -1.f, -1.f,
+													  -1.f, 8.f, -1.f, 
+													  -1.f, -1.f, -1.f));
 			break;
 		case Controls::KEY_MEAN:
-			_ppbuffer->setConvolutionMatrix(mat3(1.f) / 9.f);
+			_ppbuffer->setConvolutionMatrix(glm::mat3(1.f) / 9.f);
 			break;
 
+		// Add-ons
+		case Controls::KEY_WAVE:
+			_ppbuffer->wave();
+			break;
+		case Controls::KEY_SWIRL:
+			_ppbuffer->swirl();
+			break;
+		case Controls::KEY_GLOW:
+			_ppbuffer->glow();
+			break;
+		case Controls::KEY_SHOCKWAVE:
+			_ppbuffer->shockwave();
+			break;
+
+// 		case Controls::KEY_ACTION_BASED:
+// 			_ppbuffer->setDestPos(_world->getDestPos());
+// 			break;
+
 		// Window's control
-		case Controls::KEY_RESET:
-			// TODO::create the next function
-			_world->resetKeyPressed();
-			break;
-		case Controls::KEY_RELOAD:
-			{
-				// TODO:: create functions
-// 				_ppbuffer->loadShaders();
-// 				_world->loadShaders();
-			}
-			break;
 		case Controls::KEY_ESC:
 			exit(0);
 			break;
@@ -199,6 +225,7 @@ void mouseWheel(int wheel, int direction, int x, int y)
 void mouseMove(int x, int y)
 {
 	_world->moveLightUsingMouse(x, y);
+	_ppbuffer->updateMousePos(x, y);
 	glutPostRedisplay();
 }
 
@@ -232,6 +259,14 @@ void windowResize(int width, int height)
 	glutPostRedisplay();
 }
 
+void timer(int value)
+{
+	glutTimerFunc(25, timer, value++);
+
+	_ppbuffer->updateTime();
+	glutPostRedisplay();
+}
+
 int main( int argc, char **argv )
 {
 	glutInit(&argc, argv);
@@ -260,12 +295,13 @@ int main( int argc, char **argv )
 	// Callback functions
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
-	glutMouseFunc(mouse);
-	glutMouseWheelFunc(mouseWheel);
-	glutPassiveMotionFunc(mouseMove);
+	glutMouseFunc( mouse );
+	glutMouseWheelFunc( mouseWheel );
+	glutPassiveMotionFunc( mouseMove );
 	glutSpecialFunc( specialkey );
 	glutIdleFunc( update );
-	glutReshapeFunc(windowResize);
+	glutReshapeFunc( windowResize );
+	glutTimerFunc(150, timer, 0);
 	
 	init();
     glutMainLoop();

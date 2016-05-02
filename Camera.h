@@ -47,6 +47,7 @@ public:
 	}
 	void init(const float& angle);
 	void update();
+	void reset();
 
 	// Key functions
 	void moveUp();

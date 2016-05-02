@@ -33,6 +33,21 @@ class World
  	Light* _light;
 	void _createSceneObjects();
 
+	template <typename T>
+	T* _getObject()
+	{
+		T* wantedObj = NULL;
+		for (Object* obj : _objects)
+		{
+			wantedObj = dynamic_cast<T*>(obj);
+			if (NULL != wantedObj)
+			{
+				return wantedObj;
+			}
+		}
+		return NULL;
+	}
+
 public:
 	World();
 	virtual ~World();
@@ -40,6 +55,7 @@ public:
 	void draw();
 	void update();
 	void resize(int width, int height);
+	void loadShaders();
 
 	// Keyboard handling
 	void forwardKeyPressed();
@@ -59,4 +75,6 @@ public:
 
 	// Events
 	void flickerLight(const bool& mode);
+	glm::vec3 getDestPos();
+
 };

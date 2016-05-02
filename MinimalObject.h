@@ -31,7 +31,7 @@ public:
 
 protected:
 	MinimalObject(const glm::vec3& position, const glm::vec4& color) :
-		_position(position), _color(color)
+		_position(position), _color(color), _initialPosition(position), _initialColor(color)
 	{
 	};
 
@@ -39,4 +39,6 @@ protected:
 
 	glm::vec3 _position;
 	glm::vec4 _color;
+	glm::vec3 _initialPosition;
+	glm::vec4 _initialColor;
 };

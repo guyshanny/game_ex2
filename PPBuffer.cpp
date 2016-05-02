@@ -16,9 +16,13 @@
 #include <GL/gl.h>
 #endif
 
-PPBuffer::PPBuffer() : _convMatrix(0.f, 0.f, 0.f,
+PPBuffer::PPBuffer() : _texMode(0),
+					   _convMatrix(0.f, 0.f, 0.f,
 								   0.f, 1.f, 0.f,
-								   0.f, 0.f, 0.f)
+								   0.f, 0.f, 0.f),
+					   _time(0.f),
+					   _teapotPos(0.f),
+					   _isShowckWaveEffect(false)
 {
 }
 
@@ -121,6 +125,12 @@ void PPBuffer::_getShaderHandles()
 	_uniform_fbo_texture = glGetUniformLocation(_program_postproc, "fbo_texture");
 	_textureMode = glGetUniformLocation(_program_postproc, "textureMode");
 	_convMatrixHandle = glGetUniformLocation(_program_postproc, "convMatrix");
+	_waveOffsetHandle = glGetUniformLocation(_program_postproc, "offset");
+	_swirlTimeHandle = glGetUniformLocation(_program_postproc, "time");
+	_mousePosHandle = glGetUniformLocation(_program_postproc, "mousePos");
+	_teapotPosHandle = glGetUniformLocation(_program_postproc, "teapotPos");
+	_shockWaveElapsedTimeHandle = glGetUniformLocation(_program_postproc, "shockWaveElapsedTime");
+
 }
 
 void PPBuffer::setup()
@@ -137,7 +147,7 @@ void PPBuffer::render()
 	glViewport(0, 0, _width, _height);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glClearColor(0.3, 0.0, 0.0, 1.0);
+	glClearColor(0.3f, 0.f, 0.f, 1.f);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -148,8 +158,14 @@ void PPBuffer::render()
 	// Binds shaders' variables
 	glBindTexture(GL_TEXTURE_2D, _fbo_texture);
 	glUniform1i(_uniform_fbo_texture, /*GL_TEXTURE*/0);
-	glUniform1f(_textureMode, _texMode);
+	glUniform1i(_textureMode, _texMode);
 	glUniformMatrix3fv(_convMatrixHandle, 1, GL_FALSE, value_ptr(_convMatrix));
+	GLfloat move = (GLfloat)((GLUT_ELAPSED_TIME) / 1000.0 * 2 * 3.14159 * .75);  // 3/4 of a wave cycle per second
+	glUniform1f(_waveOffsetHandle, move);
+	glUniform1f(_swirlTimeHandle, _time);
+	glUniform1f(_shockWaveElapsedTimeHandle, _shockedWaveElapsedTime);
+	glUniform2f(_mousePosHandle, _mousePos[0], _mousePos[1]);
+	glUniform3f(_teapotPosHandle, _teapotPos[0], _teapotPos[1], _teapotPos[2]);
 
 	glBindVertexArray(_vao);
 	glEnableVertexAttribArray(_attribute_v_coord_postproc);
@@ -169,6 +185,13 @@ void PPBuffer::render()
 	glUseProgram(0);
 }
 
+void PPBuffer::reset()
+{
+	setConvolutionMatrix(glm::mat3(0.f, 0.f, 0.f,
+								   0.f, 1.f, 0.f,
+								   0.f, 0.f, 0.f));
+}
+
 void PPBuffer::resize(int screen_width, int screen_height) 
 {
 	/* onReshape */
@@ -185,11 +208,69 @@ void PPBuffer::resize(int screen_width, int screen_height)
 	_height = screen_height;
 }
 
+void PPBuffer::updateTime()
+{
+	_time++;
+
+	if (_isShowckWaveEffect)
+	{
+		_shockedWaveElapsedTime += (float)(25.0 / 1000);
+	}
+}
+
+glm::vec2 PPBuffer::_toWorld(const int& x, const int& y)
+{
+	const float maxBoundary = 0.5f;
+	const float minBoundary = 0.5f;
+
+	float xnorm = ((float)x <= Globals::WINDOW_WIDTH / 2.f) ? -(Globals::WINDOW_WIDTH / 2.f - (float)x) : (float)x - Globals::WINDOW_WIDTH / 2.f;
+	float ynorm = ((float)y <= Globals::WINDOW_HEIGHT / 2.f) ? Globals::WINDOW_HEIGHT / 2.f - (float)y : -((float)y - Globals::WINDOW_HEIGHT / 2.f);
+
+	xnorm = (xnorm / (Globals::WINDOW_WIDTH / 2.f)) / 2.f;
+	ynorm = (ynorm / (Globals::WINDOW_HEIGHT / 2.f)) / 2.f;
+
+	return glm::vec2(xnorm, ynorm);
+}
+
+void PPBuffer::updateMousePos(const int & x, const int & y)
+{
+	_mousePos = _toWorld(x, y);
+}
+
+
+
 #pragma region Effects
-	void PPBuffer::setConvolutionMatrix(const mat3 & convMatrix)
+	void PPBuffer::setConvolutionMatrix(const glm::mat3 & convMatrix)
 	{
 		_texMode = PPEffects::Modes::CONVOLUTION;
 		_convMatrix = convMatrix;
+	}
+
+	void PPBuffer::setDestPos(const glm::vec3 & teapotPos)
+	{
+		_texMode = PPEffects::Modes::ACTION_BASED;
+		_teapotPos = teapotPos;
+	}
+
+	void PPBuffer::wave()
+	{
+		_texMode = PPEffects::Modes::WAVE;
+	}
+
+	void PPBuffer::swirl()
+	{
+		_texMode = PPEffects::Modes::SWIRL;
+	}
+
+	void PPBuffer::shockwave()
+	{
+		_texMode = PPEffects::Modes::SHOCKWAVE;
+		_isShowckWaveEffect = true;
+	}
+
+	void PPBuffer::glow()
+	{
+		_texMode = PPEffects::Modes::GLOW;
 	}
 #pragma endregion
 

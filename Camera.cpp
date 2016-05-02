@@ -35,6 +35,16 @@ void Camera::update()
 	if (_commands[Commands::ZOOM_OUT]) { _zoomOut(); }
 }
 
+void Camera::reset()
+{
+	_direction = _initialDirection;
+	_position = _initialPosition;
+	_up = glm::vec3(0, 1, 0);
+	_speed = 0.2f;
+
+	init(_angle);
+}
+
 glm::mat4 Camera::_calculateViewMatrix()
 {
 	_view = lookAt(_position, _position + _direction, _up);

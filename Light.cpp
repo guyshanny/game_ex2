@@ -7,8 +7,22 @@ Light::Light(const glm::vec3& position,
 										_movingSpeed(0.1f),
 										_direction(direction), 
 										_coneOfLight(3.01f), 
-										_attenuation(1.0f)
+										_attenuation(1.0f),
+										_initialDirection(direction),
+										_initialMovingSpeed(_movingSpeed),
+										_initialConeOfLight(_coneOfLight),
+										_initialAttenuation(_attenuation)
 {
+}
+
+void Light::reset()
+{
+	_position = _initialPosition;
+	_color = _initialColor;
+	_movingSpeed = _initialMovingSpeed;
+	_direction = _initialDirection;
+	_coneOfLight = _initialConeOfLight;
+	_attenuation = _initialAttenuation;
 }
 
 void Light::moveUsingArrows(int key)
