@@ -126,6 +126,11 @@ void World::moveLightUsingArrows(int key)
 	_light->moveUsingArrows(key);
 }
 
+void World::resetKeyPressed()
+{
+
+}
+
 #pragma endregion
 
 #pragma region MouseHandling

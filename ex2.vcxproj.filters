@@ -54,21 +54,15 @@
     <ClCompile Include="Globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PPBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\phongV1.2.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\phongV1.2.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\phongV3.3Simple.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\phongV3.3Simple.vert">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="meshes\teapotMesh.off">
       <Filter>meshes</Filter>
     </None>
@@ -78,16 +72,19 @@
     <None Include="meshes\bunny_1k.off">
       <Filter>meshes</Filter>
     </None>
-    <None Include="shaders\‏‏phong_teapotV3.3.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\‏‏phong_teapotV3.3.vert">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="shaders\phong_wallV3.3.frag">
+    <None Include="shaders\phong_teapotV3.3.vert">
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\phong_wallV3.3.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\phongV3.3.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\postproc.f.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\postproc.v.glsl">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
@@ -131,6 +128,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameEvents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PPBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

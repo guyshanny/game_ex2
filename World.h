@@ -48,6 +48,7 @@ public:
 	void turnLeftKeyPressed();
 	void changeColorKeyPressed();
 	void moveLightUsingArrows(int key);
+	void resetKeyPressed();
 
 	// Mouse handling
 	void mouseLeftDown(const int& x, const int& y);

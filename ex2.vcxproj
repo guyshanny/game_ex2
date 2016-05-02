@@ -137,6 +137,8 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OpenMeshObject.cpp" />
+    <ClCompile Include="PPBuffer.cpp" />
+    <ClCompile Include="ShaderIO.cpp" />
     <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="World.cpp" />
@@ -146,14 +148,11 @@
     <None Include="meshes\teapot.obj" />
     <None Include="meshes\teapotMesh.off" />
     <None Include="packages.config" />
-    <None Include="shaders\phongV1.2.frag" />
-    <None Include="shaders\phongV1.2.vert" />
-    <None Include="shaders\phongV3.3Simple.frag" />
-    <None Include="shaders\phongV3.3Simple.vert" />
-    <None Include="shaders\phong_wallV3.3.frag" />
+    <None Include="shaders\phongV3.3.frag" />
+    <None Include="shaders\phong_teapotV3.3.vert" />
     <None Include="shaders\phong_wallV3.3.vert" />
-    <None Include="shaders\‏‏phong_teapotV3.3.frag" />
-    <None Include="shaders\‏‏phong_teapotV3.3.vert" />
+    <None Include="shaders\postproc.f.glsl" />
+    <None Include="shaders\postproc.v.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.jpg" />
@@ -168,6 +167,8 @@
     <ClInclude Include="MinimalObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OpenMeshObject.h" />
+    <ClInclude Include="PPBuffer.h" />
+    <ClInclude Include="ShaderIO.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="World.h" />

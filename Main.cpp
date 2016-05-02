@@ -9,7 +9,7 @@
 
 #include "World.h"
 #include "GameEvents.h"
-
+#include "PPBuffer.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,6 +17,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 World* _world;
 GameEvents* _gameEvents;
+PPBuffer* _ppbuffer;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //												Controls										  //
@@ -37,6 +39,13 @@ namespace Controls
 		KEY_BACKWARD = ('s'),
 		KEY_TURN_LEFT = ('a'),
 		KEY_TURN_RIGHT = ('d'),
+
+		// PP controls
+		KEY_NO_EFFECT = ('0'),
+		KEY_BLUR = ('1'),
+		KEY_EDGE_DETACTION = ('2'),
+		KEY_SHARPING = ('3'),
+		KEY_MEAN = ('4'),
 	};
 }
 
@@ -44,25 +53,34 @@ namespace Controls
 
 void init( void )
 {
-    glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glClearColor( 0.0, 0.0, 0.0, 1.0 );
+	// TODO::REMOVE NEXT LINE
+// 	glDepthFunc(GL_LESS);
 
 	// Creating the world
 	_world = new World();
 	_world->init();
 
+	// Creating game event manager
 	_gameEvents = GameEvents::instance();
 	_gameEvents->init(_world);
+
+	// Creating post-processing buffer
+	_ppbuffer = new PPBuffer();
+	_ppbuffer->init(Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT);
 }
 
 void display( void )
 {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );     // clear the window
+	_ppbuffer->setup();
+
+	// Clear the window & the screen buffer
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_world->draw();
+	_ppbuffer->render();
 
-	// Swap those buffers so someone will actually see the results... //
+	// Swap those buffers so someone will actually see the results
 	glutSwapBuffers();
 }
 
@@ -70,6 +88,7 @@ void keyboard( unsigned char key, int x, int y )
 {
 	switch (tolower(key))
 	{    
+		// Game's control
 		case Controls::KEY_FORWARD:
 			_world->forwardKeyPressed();
 			break;
@@ -82,11 +101,53 @@ void keyboard( unsigned char key, int x, int y )
 		case Controls::KEY_TURN_LEFT:
 			_world->turnLeftKeyPressed();
 			break;
-		case Controls::KEY_ESC:
-			exit(0);
-			break;
 		case Controls::KEY_COLOR_CHANGE:
 			_world->changeColorKeyPressed();
+			break;
+
+		// PP controls
+		/* Kernels - https://en.wikipedia.org/wiki/Kernel_(image_processing)
+					 http://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm
+					 Our code in image processing course
+		*/
+		case Controls::KEY_NO_EFFECT:	// Identity matrix
+			_ppbuffer->setConvolutionMatrix(mat3(0.f, 0.f, 0.f,
+												 0.f, 1.f, 0.f,
+												 0.f, 0.f, 0.f));
+			break;
+		case Controls::KEY_BLUR:		// Gaussian blur
+			_ppbuffer->setConvolutionMatrix(mat3(1.f, 2.f, 1.f, 
+												 2.f, 4.f, 2.f, 
+												 1.f, 2.f, 1.f) / 16.f);
+			break;
+		case Controls::KEY_EDGE_DETACTION:
+			_ppbuffer->setConvolutionMatrix(mat3(0.f, 1.f, 0.f,
+												 1.f, -4.f, 1.f, 
+												 0.f, 1.f, 0.f));
+			break;
+		case Controls::KEY_SHARPING:
+			_ppbuffer->setConvolutionMatrix(mat3(-1.f, -1.f, -1.f, 
+												 -1.f, 8.f, -1.f, 
+												 -1.f, -1.f, -1.f));
+			break;
+		case Controls::KEY_MEAN:
+			_ppbuffer->setConvolutionMatrix(mat3(1.f) / 9.f);
+			break;
+
+		// Window's control
+		case Controls::KEY_RESET:
+			// TODO::create the next function
+			_world->resetKeyPressed();
+			break;
+		case Controls::KEY_RELOAD:
+			{
+				// TODO:: create functions
+// 				_ppbuffer->loadShaders();
+// 				_world->loadShaders();
+			}
+			break;
+		case Controls::KEY_ESC:
+			exit(0);
 			break;
 		default:
 			std::cerr << "Key " << tolower(key) << " undefined\n";
@@ -161,22 +222,42 @@ void update()
 	glutPostRedisplay();
 }
 
-void resizeWindowHandler(int width, int height)
+void windowResize(int width, int height)
 {
+	// Updating buffer and the world correspondingly
+	_ppbuffer->resize(width, height);
 	_world->resize(width, height);
+
+	glViewport(0, 0, width, height);
+	glutPostRedisplay();
 }
 
 int main( int argc, char **argv )
 {
 	glutInit(&argc, argv);
-    glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT);
-    glutCreateWindow(argv[0]);
-    
-	glewExperimental = GL_TRUE;
-	glewInit();
-    init();
 
+#ifdef __APPLE__
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_3_3_CORE_PROFILE);
+#else
+	glutInitContextVersion(3, 3);
+	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE | GLUT_DEBUG);
+	glutInitContextProfile(GLUT_CORE_PROFILE);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+#endif
+	glutInitWindowSize(Globals::WINDOW_WIDTH, Globals::WINDOW_HEIGHT);
+    glutCreateWindow(argv[0]);
+	glEnable(GL_DEPTH_TEST);
+    
+	// Initialize GLEW
+	glewExperimental = GL_TRUE;
+	int glewStatus = glewInit();
+	if (glewStatus != GLEW_OK) 
+	{
+		std::cerr << "Unable to initialize GLEW ... exiting" << std::endl;
+		exit(1);
+	}
+
+	// Callback functions
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
 	glutMouseFunc(mouse);
@@ -184,15 +265,14 @@ int main( int argc, char **argv )
 	glutPassiveMotionFunc(mouseMove);
 	glutSpecialFunc( specialkey );
 	glutIdleFunc( update );
-	glutReshapeFunc(resizeWindowHandler);
+	glutReshapeFunc(windowResize);
 	
-
+	init();
     glutMainLoop();
 
-	if (NULL != _world)
-	{
-		delete _world;
-		_world = NULL;
-	}
+	if (NULL != _world) { delete _world; }
+	if (NULL != _gameEvents) { delete _gameEvents; }
+	if (NULL != _ppbuffer) { delete _ppbuffer; }
+
     return 0;
 }

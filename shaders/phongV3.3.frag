@@ -40,7 +40,7 @@ void main()
 	vec3 lightColor = gLightColor.rgb;
 
 	// Material properties
-	vec3 materialDiffuseCoefficient = texture2D(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
+	vec3 materialDiffuseCoefficient = texture(gTextureSampler, TexCoordPass).rgb * gMaterialColor.rgb;
 	vec3 materialSpecularCoefficient = vec3(1.0,1.0,1.0);
 
 	// Ambient color
@@ -92,5 +92,6 @@ void main()
 		attenuation *= circleFactor;
 	}
 
+	attenuation = 1.f;
 	 outColor = (diffusiveColor + specularColor) * attenuation + ambientColor;
 }
