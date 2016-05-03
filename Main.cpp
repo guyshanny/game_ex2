@@ -11,6 +11,7 @@
 #include "GameEvents.h"
 #include "PPBuffer.h"
 
+#include <mmsystem.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //												Globals											  //
@@ -303,6 +304,7 @@ int main( int argc, char **argv )
 	glutReshapeFunc( windowResize );
 	glutTimerFunc(150, timer, 0);
 	
+	PlaySound("sounds\\ScarySound.wav", NULL, SND_ASYNC | SND_LOOP);
 	init();
     glutMainLoop();
 
