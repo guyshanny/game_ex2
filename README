@@ -33,6 +33,10 @@ Additional post processing - edge, sharp, swirl etc...
 Image space pp  - salt&pepper, static wave
 Time based pp  - glow, swirl
 
+Additional
+----------
+We've added a scary sound effect
+
 Running
 -------
 Pay attention - there are some static configuration in our solution (ex2.vcxproj) such as:
